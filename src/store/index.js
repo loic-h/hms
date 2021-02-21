@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import socket from '../services/socket';
 import api from "../api";
 
 export default createStore({
@@ -18,7 +19,8 @@ export default createStore({
       items: [],
       loading: false,
       error: null
-    }
+    },
+    playing: null,
   },
 
   mutations: {
@@ -41,6 +43,10 @@ export default createStore({
         ...state.tracks,
         ...payload
       };
+    },
+
+    playing: (state, payload) => {
+      state.playing = payload;
     }
   },
   actions: {
@@ -87,6 +93,16 @@ export default createStore({
       }
       commit("tracks", { loading: false });
       return body;
+    },
+
+    play: ({ commit }, payload) => {
+      commit("playing", payload);
+      socket.emit("play", payload);
+    },
+
+    pause: ({ commit }, payload) => {
+      commit("playing", null);
+      socket.emit("pause", payload);
     }
   }
 });

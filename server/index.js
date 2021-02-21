@@ -2,16 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const api = require('./api');
 const path = require('path');
-
+const socket = require('./socket');
 
 const app = express();
 const server = require('http').createServer(app);
-
-const io = require('socket.io')(server);
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-});
+socket(server);
 
 app.use('/api', api);
 

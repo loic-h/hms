@@ -23,30 +23,44 @@ export default {
   data() {
     return {
       audio: null,
-      canplay: false,
-      playing: false
+      canplay: false
     };
   },
   computed: {
     buttonCopy() {
       return this.playing ? "Pause" : "Play";
+    },
+    playing() {
+      return this.$store.state.playing === this.preview;
+    }
+  },
+  watch: {
+    playing(value) {
+      if (!this.audio) {
+        return;
+      }
+      if (value) {
+        this.audio.play();
+      } else {
+        this.audio.pause();
+      }
     }
   },
   mounted() {
-    console.log(this.preview)
-    this.audio = new Audio(this.preview);
-    this.audio.addEventListener('canplaythrough', () => {
-      this.canplay = true;
-    });
+    if (this.preview) {
+      this.audio = new Audio(this.preview);
+      this.audio.addEventListener('canplaythrough', () => {
+        this.canplay = true;
+      });
+    }
   },
   methods:{
     togglePlay() {
       if (this.playing) {
-        this.audio.pause();
+        this.$store.dispatch('pause', this.preview);
       } else {
-        this.audio.play();
+        this.$store.dispatch('play', this.preview);
       }
-      this.playing = !this.playing;
     }
   }
 };
