@@ -4,7 +4,7 @@ import api from "../api";
 export default createStore({
   state: {
     spotify: {
-      on: false,
+      connected: false,
       loading: false,
       error: null
     },
@@ -44,19 +44,18 @@ export default createStore({
     }
   },
   actions: {
-    token: ({ commit }) => {
+    token: async ({ commit }) => {
       commit("spotify", { loading: true });
-      api.connect()
-        .then(body => {
-          commit("spotify", { on: true });
-        })
-        .catch(err => {
-          commit("spotify", { error: err });
-          console.log(err)
-        })
-        .finally(() => {
-          commit("spotify", { loading: false });
-        });
+      let connected;
+      try {
+        await api.connect();
+        connected = true;
+        commit("spotify", { connected });
+      } catch(err) {
+        commit("spotify", { error: err });
+      }
+      commit("spotify", { loading: false });
+      return connected;
     },
 
     search: ({ commit }, payload) => {
@@ -74,20 +73,20 @@ export default createStore({
         });
     },
 
-    playlist: ({ commit }, payload) => {
+    playlist: async ({ commit }, payload) => {
       commit("playlists", { id: payload, items: [] });
       commit("tracks", { loading: true });
-      api.playlist({ id: payload })
-        .then(body => {
-          commit("tracks", {
-            items: body.items
-          });
-        })
-        .catch(err => {
-          commit("tracks", { error: err });
-        }).finally(() => {
-          commit("tracks", { loading: false });
+      let body;
+      try {
+        body = await api.playlist({ id: payload })
+        commit("tracks", {
+          items: body.items
         });
+      } catch(err) {
+        commit("tracks", { error: err });
+      }
+      commit("tracks", { loading: false });
+      return body;
     }
   }
 });

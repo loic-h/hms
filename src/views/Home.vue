@@ -2,19 +2,39 @@
   <div class="home">
     <h1>Create a game</h1>
     <search />
-    <tracks />
+    <h3>
+      Tracks
+    </h3>
+    <ul v-if="tracks.length > 0">
+      <li
+        v-for="item in tracks"
+        :key="item.id">
+        {{ item.artists.join(', ')}} – {{ item.name }}
+      </li>
+    </ul>
+    <router-link
+      v-if="playlistId"
+      :to="`/game/${playlistId}`">
+      Create
+    </router-link>
   </div>
 </template>
 
 <script>
 import Search from "../components/search";
-import Tracks from "../components/tracks";
 
 export default {
   name: 'Home',
   components: {
-    Search,
-    Tracks
+    Search
+  },
+  computed: {
+    tracks() {
+      return this.$store.state.tracks.items
+    },
+    playlistId() {
+      return this.$store.state.playlists.id
+    }
   }
 }
 </script>
