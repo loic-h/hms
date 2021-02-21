@@ -3,8 +3,15 @@ const cors = require('cors');
 const api = require('./api');
 const path = require('path');
 
+
 const app = express();
 const server = require('http').createServer(app);
+
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
 
 app.use('/api', api);
 
