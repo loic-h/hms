@@ -9,7 +9,7 @@
       <li
         v-for="item in tracks"
         :key="item.id">
-        {{ item.artists.join(', ')}} – {{ item.name }}
+        {{ item.artists.join(', ') }} – {{ item.name }}
       </li>
     </ul>
     <router-link
