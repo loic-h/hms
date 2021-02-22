@@ -31,7 +31,7 @@ export default {
       return this.playing ? "Pause" : "Play";
     },
     playing() {
-      return this.$store.state.playing === this.preview;
+      return this.$store.state.server.playing === this.preview;
     }
   },
   watch: {
@@ -60,9 +60,9 @@ export default {
   methods:{
     togglePlay() {
       if (this.playing) {
-        this.$store.dispatch('pause', this.preview);
+        this.$store.dispatch('server/pause', this.preview);
       } else {
-        this.$store.dispatch('play', this.preview);
+        this.$store.dispatch('server/play', this.preview);
       }
     },
     onCanPlay() {
