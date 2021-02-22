@@ -14,7 +14,7 @@
     </ul>
     <router-link
       v-if="playlistId"
-      :to="`/game/${playlistId}`">
+      :to="`/game/${playlistId}/admin`">
       Create
     </router-link>
   </div>
@@ -30,11 +30,11 @@ export default {
   },
   computed: {
     tracks() {
-      return this.$store.state.tracks.items
+      return this.$store.server.state.tracks.items
     },
     playlistId() {
-      return this.$store.state.playlists.id
+      return this.$store.server.state.playlists.id
     }
   }
-}
+};
 </script>

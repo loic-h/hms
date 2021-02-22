@@ -17,15 +17,15 @@
 export default {
   computed: {
     items() {
-      return this.$store.state.playlists.items;
+      return this.$store.state.server.playlists.items;
     }
   },
   methods: {
     onPlaylistInput(event) {
-      this.$store.dispatch("search", event.target.value);
+      this.$store.dispatch("server/search", event.target.value);
     },
     selectPlaylist(id) {
-      this.$store.dispatch("playlist", id);
+      this.$store.dispatch("server/playlist", id);
     }
   }
 };

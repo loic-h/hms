@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.tracks.items;
+      return this.$store.state.server.tracks.items;
     }
   }
 }

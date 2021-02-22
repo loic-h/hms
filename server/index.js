@@ -13,6 +13,7 @@ app.use('/api', api);
 app.use(express.static(__dirname + '/../dist'));
 app.get([
   '/game/:id',
+  '/game/:id/admin',
   '/404'
 ], (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../dist/index.html'));

@@ -49,9 +49,12 @@ export default {
   mounted() {
     if (this.preview) {
       this.audio = new Audio(this.preview);
-      this.audio.addEventListener('canplaythrough', () => {
-        this.canplay = true;
-      });
+      this.audio.addEventListener('canplaythrough', this.onCanPlay);
+    }
+  },
+  beforeUnmount() {
+    if (this.audio) {
+      this.audio.removeEventListener('canplaythrough', this.onCanPlay);
     }
   },
   methods:{
@@ -61,6 +64,9 @@ export default {
       } else {
         this.$store.dispatch('play', this.preview);
       }
+    },
+    onCanPlay() {
+      this.canplay = true;
     }
   }
 };
