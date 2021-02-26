@@ -50,6 +50,7 @@ export default {
       state.playing = payload;
     }
   },
+
   actions: {
     token: async ({ commit }) => {
       commit("spotify", { loading: true });
@@ -96,14 +97,20 @@ export default {
       return body;
     },
 
-    play: ({ commit }, payload) => {
+    play: ({ state, commit }, payload) => {
       commit("playing", payload);
-      socket.emit("server:play", payload);
+      socket.emit("server:play", {
+        room: state.playlists.id,
+        url: payload
+      });
     },
 
-    pause: ({ commit }, payload) => {
+    pause: ({ state, commit }, payload) => {
       commit("playing", null);
-      socket.emit("server:pause", payload);
+      socket.emit("server:pause", {
+        room: state.playlists.id,
+        url: payload
+      });
     }
   }
 };

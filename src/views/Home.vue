@@ -30,10 +30,10 @@ export default {
   },
   computed: {
     tracks() {
-      return this.$store.server.state.tracks.items
+      return this.$store.state.server.tracks.items
     },
     playlistId() {
-      return this.$store.server.state.playlists.id
+      return this.$store.state.server.playlists.id
     }
   }
 };

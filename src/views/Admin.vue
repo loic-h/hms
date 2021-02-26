@@ -8,6 +8,7 @@
 
 <script>
 import Tracks from "../components/tracks";
+import socket from '../services/socket';
 
 export default {
   name: 'Admin',
@@ -21,6 +22,9 @@ export default {
     gameUrl() {
       return new URL(`/game/${this.gameId}`, window.location.origin).toString();
     }
+  },
+  mounted() {
+    socket.emit("room:join", this.$route.params.id);
   }
 }
 </script>
