@@ -4,6 +4,7 @@ const connect = require('../server/connect');
 module.exports = async (req, res) => {
   try {
     const accessToken = await connect();
+    console.log(">>>>>>> token", accessToken);
     const response = await axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/search',
