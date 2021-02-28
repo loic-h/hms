@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import debounce from "../utils/debounce";
+
 export default {
   computed: {
     items() {
@@ -21,9 +23,9 @@ export default {
     }
   },
   methods: {
-    onPlaylistInput(event) {
+    onPlaylistInput: debounce(function (event) {
       this.$store.dispatch("server/search", event.target.value);
-    },
+    }, 500),
     selectPlaylist(id) {
       this.$store.dispatch("server/playlist", id);
     }
