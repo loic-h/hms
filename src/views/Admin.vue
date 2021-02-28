@@ -2,18 +2,21 @@
   <div class="login">
     <h1>Manage the game</h1>
     <p>Share link: <a :href="gameUrl">{{ gameUrl }}</a></p>
+    <clients />
     <tracks />
   </div>
 </template>
 
 <script>
 import Tracks from "../components/tracks";
+import Clients from "../components/clients";
 import { unsubscribe } from "../services/pusher";
 
 export default {
   name: 'Admin',
   components: {
-    Tracks
+    Tracks,
+    Clients
   },
   computed: {
     gameId() {

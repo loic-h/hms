@@ -21,6 +21,12 @@ export default {
       loading: false,
       error: null
     },
+    clients: JSON.parse(localStorage.getItem("clients") || '[]'),
+    /* {
+      id: String,
+      name: String,
+      messages
+    } */
     playing: null,
   },
 
@@ -46,13 +52,36 @@ export default {
       };
     },
 
+    client: (state, payload) => {
+      if (!payload.id) {
+        return;
+      }
+      const items = [...state.clients];
+      const itemIndex = items.findIndex(a => a.id === payload.id);
+      if (itemIndex >= 0) {
+        items[itemIndex] = {
+          ...state.clients[itemIndex],
+          ...payload
+        };
+      } else {
+        items = [
+          ...state.clients,
+          payload
+        ];
+      }
+      console.log("items", items)
+      state.clients = [...items];
+      console.log(state.clients);
+      localStorage.setItem("clients", JSON.stringify(state.clients));
+    },
+
     playing: (state, payload) => {
       state.playing = payload;
     }
   },
 
   getters: {
-    gameId(state) {
+    gameId: (state) => {
       return state.playlists.id
     }
   },
@@ -103,11 +132,12 @@ export default {
       return body;
     },
 
-    room: async ({ getters }) => {
+    room: async ({ getters, commit }) => {
       subscribe(getters.gameId)
         .then(() => {
-          listen("join", (data) => {
-            console.log("joined", data);
+          listen("join", ({ name, id }) => {
+            console.log("joined: ", { name, id })
+            commit("client", { name, id });
           });
         });
     },

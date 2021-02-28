@@ -16,7 +16,6 @@ const routes = [
     name: 'Client',
     component: Client,
     beforeEnter: (to) => {
-      console.log(to)
       store.commit("client/gameId", to.params.id);
     }
   },

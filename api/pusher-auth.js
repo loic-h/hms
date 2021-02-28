@@ -9,7 +9,6 @@ const pusher = new Pusher({
 });
 
 module.exports = async (req, res) => {
-  console.log(req.body.socket_id)
   const socketId = req.body.socket_id;
   const channel = req.body.channel_name;
   const auth = pusher.authenticate(socketId, channel);

@@ -1,5 +1,6 @@
 <template>
   <template v-if="ready">
+    <h3>{{ name }}</h3>
     <player />
   </template>
   <template v-else>
@@ -8,9 +9,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Start from '../components/client/start';
 import Player from '../components/client/player';
-import { unsubscribe } from "../services/pusher";
+import { unsubscribe } from '../services/pusher';
 
 export default {
   name: 'Client',
@@ -19,12 +21,10 @@ export default {
     Player
   },
   computed: {
-    ready() {
-      return !! this.$store.state.client.name;
-    }
+    ...mapState('client', ['ready', 'name'])
   },
-  beforeUnmount() {
-    unsubscribe(this.$store.getters.server.playlists.id);
+  created() {
+    this.$store.dispatch("client/load");
   }
 };
 </script>
