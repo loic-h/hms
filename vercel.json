@@ -1,0 +1,5 @@
+{
+  "routes": [
+    { "src": "/pusher/auth", "dest": "api/pusher-auth" }
+  ]
+}

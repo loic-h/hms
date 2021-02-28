@@ -1,5 +1,5 @@
-import socket from '../services/socket';
 import api from "../api";
+import { subscribe, listen, push } from "../services/pusher";
 
 export default {
   namespaced: true,
@@ -51,6 +51,12 @@ export default {
     }
   },
 
+  getters: {
+    gameId(state) {
+      return state.playlists.id
+    }
+  },
+
   actions: {
     token: async ({ commit }) => {
       commit("spotify", { loading: true });
@@ -97,18 +103,25 @@ export default {
       return body;
     },
 
+    room: async ({ getters }) => {
+      subscribe(getters.gameId)
+        .then(() => {
+          listen("join", (data) => {
+            console.log("joined", data);
+          });
+        });
+    },
+
     play: ({ state, commit }, payload) => {
       commit("playing", payload);
-      socket.emit("server:play", {
-        room: state.playlists.id,
+      push("play", {
         url: payload
       });
     },
 
     pause: ({ state, commit }, payload) => {
       commit("playing", null);
-      socket.emit("server:pause", {
-        room: state.playlists.id,
+      push("pause", {
         url: payload
       });
     }

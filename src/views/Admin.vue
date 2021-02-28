@@ -8,7 +8,7 @@
 
 <script>
 import Tracks from "../components/tracks";
-import socket from '../services/socket';
+import { unsubscribe } from "../services/pusher";
 
 export default {
   name: 'Admin',
@@ -24,7 +24,10 @@ export default {
     }
   },
   mounted() {
-    socket.emit("room:join", this.$route.params.id);
+    this.$store.dispatch("server/room", this.$route.params.id);
+  },
+  beforeUnmount() {
+    unsubscribe(this.$store.getters.server.playlists.id);
   }
 }
 </script>

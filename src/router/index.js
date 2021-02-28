@@ -14,7 +14,11 @@ const routes = [
   {
     path: '/game/:id',
     name: 'Client',
-    component: Client
+    component: Client,
+    beforeEnter: (to) => {
+      console.log(to)
+      store.commit("client/gameId", to.params.id);
+    }
   },
   {
     path: '/game/:id/admin',

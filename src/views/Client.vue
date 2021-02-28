@@ -10,7 +10,7 @@
 <script>
 import Start from '../components/client/start';
 import Player from '../components/client/player';
-import socket from '../services/socket';
+import { unsubscribe } from "../services/pusher";
 
 export default {
   name: 'Client',
@@ -23,8 +23,8 @@ export default {
       return !! this.$store.state.client.name;
     }
   },
-  mounted() {
-    socket.emit("room:join", this.$route.params.id);
+  beforeUnmount() {
+    unsubscribe(this.$store.getters.server.playlists.id);
   }
 };
 </script>

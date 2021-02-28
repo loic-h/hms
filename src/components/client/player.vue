@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import socket from '../../services/socket';
+import { listen } from '../../services/pusher';
 
 export default {
   name: "Player",
@@ -22,18 +22,14 @@ export default {
   mounted() {
     this.initAudio();
   },
-  beforeUnmount() {
-    socket.off("client:play");
-    socket.off("client:pause");
-  },
   methods: {
     initAudio() {
-      socket.on("client:play", url => {
+      listen("play", ({ url }) => {
         this.audio.src = url;
         this.play();
       });
 
-      socket.on("client:pause", () => {
+      listen("pause", () => {
         this.pause();
       });
     },

@@ -1,12 +1,3 @@
-const connect = () => fetch('/api/connect')
-    .then(res => res.json())
-    .then(res => {
-      if (res.status !== 'ok') {
-        throw new Error(res.message);
-      }
-      return res.body;
-    });
-
 const search = ({ query, token, type }) => {
   const url = new URL('/api/search', window.location.origin);
   url.searchParams.append('q', query);
@@ -34,8 +25,23 @@ const playlist = ({ id }) => {
     });
   };
 
+const push = ({ id, event, body }) => {
+  const url = new URL('/api/push', window.location.origin);
+  url.searchParams.append('id', id);
+  url.searchParams.append('event', event);
+  url.searchParams.append('message', JSON.stringify(body));
+  return fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status !== 'ok') {
+        throw new Error(res.message);
+      }
+      return res.body;
+    });
+};
+
 export default {
-  connect,
+  push,
   search,
   playlist
 };
