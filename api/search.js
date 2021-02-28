@@ -2,9 +2,8 @@ const axios = require('axios');
 const connect = require('../server/connect');
 
 module.exports = async (req, res) => {
-  // try {
+  try {
     const accessToken = await connect();
-    console.log(">>>>>>> token", accessToken);
     const response = await axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/search',
@@ -23,8 +22,8 @@ module.exports = async (req, res) => {
         items: response.data.playlists.items
       }
     });
-  // } catch(err) {
-  //   console.log(err)
-  //   res.status(err.response.status).send(err.response.statusText);
-  // }
+  } catch(err) {
+    console.log(err)
+    res.status(err.response.status).send(err.response.statusText);
+  }
 };

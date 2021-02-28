@@ -21,14 +21,18 @@ const search = ({ query, token, type }) => {
     });
 };
 
-const playlist = ({ id }) => fetch(`/api/playlists/${id}`)
-  .then(res => res.json())
-  .then(res => {
-    if (res.status !== 'ok') {
-      throw new Error(res.message);
-    }
-    return res.body;
-  });
+const playlist = ({ id }) => {
+  const url = new URL('/api/playlist', window.location.origin);
+  url.searchParams.append('id', id);
+  return fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status !== 'ok') {
+        throw new Error(res.message);
+      }
+      return res.body;
+    });
+  };
 
 export default {
   connect,
