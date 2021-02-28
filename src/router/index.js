@@ -42,17 +42,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
-
-router.beforeEach(async (to, from) => {
-  if (store.state.server.spotify.connected || to.name === 'NotFound') {
-    return true
-  }
-  const connected = await store.dispatch('server/token');
-  if (!connected) {
-    return { name: 'NotFound' };
-  }
-  return true;
 });
 
 export default router
