@@ -1,4 +1,4 @@
-import { push, subscribe } from '../services/pusher';
+import { listen, push, subscribe } from '../services/pusher';
 import { v4 as uuid } from 'uuid';
 
 export default {
@@ -7,7 +7,8 @@ export default {
   state: {
     id: null,
     name: null,
-    ready: false
+    ready: false,
+    gameId: null
   },
 
   mutations: {
@@ -34,20 +35,26 @@ export default {
     load: ({ commit }) => {
       const id = localStorage.getItem('playerId') || uuid();
       const name = localStorage.getItem('playerName');
-      console.log(id)
       commit('id', id);
       commit('name', name);
     },
-    ready: ({ state, commit }, { name }) => {
+    ready: ({ state, commit, dispatch }, { name }) => {
       commit('ready', true);
       commit('name', name);
       subscribe(state.gameId)
-        .then(() => {
-          push('join', {
-            id: state.id,
-            name: state.name
-          });
-        });
+      .then(() => {
+        dispatch('join');
+      });
+      // Join on server reload
+      listen(`room-${state.gameId}`, () => {
+        dispatch('join')
+      });
+    },
+    join: ({ state }) => {
+      push(`join-${state.gameId}`, {
+        id: state.id,
+        name: state.name
+      });
     }
   }
 };

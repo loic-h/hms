@@ -12,7 +12,6 @@
 import { mapState } from 'vuex';
 import Start from '../components/client/start';
 import Player from '../components/client/player';
-import { unsubscribe } from '../services/pusher';
 
 export default {
   name: 'Client',

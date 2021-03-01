@@ -21,7 +21,7 @@ export default {
       loading: false,
       error: null
     },
-    clients: JSON.parse(localStorage.getItem("clients") || '[]'),
+    clients: [],
     /* {
       id: String,
       name: String,
@@ -56,7 +56,7 @@ export default {
       if (!payload.id) {
         return;
       }
-      const items = [...state.clients];
+      let items = [...state.clients];
       const itemIndex = items.findIndex(a => a.id === payload.id);
       if (itemIndex >= 0) {
         items[itemIndex] = {
@@ -69,10 +69,7 @@ export default {
           payload
         ];
       }
-      console.log("items", items)
       state.clients = [...items];
-      console.log(state.clients);
-      localStorage.setItem("clients", JSON.stringify(state.clients));
     },
 
     playing: (state, payload) => {
@@ -135,8 +132,9 @@ export default {
     room: async ({ getters, commit }) => {
       subscribe(getters.gameId)
         .then(() => {
-          listen("join", ({ name, id }) => {
-            console.log("joined: ", { name, id })
+          // Reconnect clients
+          push(`room-${getters.gameId}`, {});
+          listen(`join-${getters.gameId}`, ({ name, id }) => {
             commit("client", { name, id });
           });
         });

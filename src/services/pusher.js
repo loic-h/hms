@@ -1,7 +1,7 @@
 import globals from "../utils/globals";
 import Pusher from "pusher-js";
 
-Pusher.logToConsole = process.env.node === "development";
+Pusher.logToConsole = process.env.NODE_ENV === "development";
 
 const pusher = new Pusher(globals.env.pusher.key, {
   cluster: globals.env.pusher.cluster
