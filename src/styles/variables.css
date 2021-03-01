@@ -1,0 +1,25 @@
+:root {
+  /* Colors */
+
+  --white: #ffffff;
+  --black: #222222;
+  --grey-light: #F8F8F8;
+
+  --bg: var(--white);
+  --nav-link: rgba(var(--black), 0.5);
+  --span-backgound: var(--grey-light);
+
+  /* Sizes */
+  --max-width: 30rem;
+  --space: 1rem;
+  --content-top-padding: 3.25rem;
+  --content-bottom-padding: 6.25rem;
+  --span-border-radius: 4px;
+  --container-padding: 1rem;
+
+  /* Typography */
+  --font-size-p: 1.1rem;
+  --font-size-counter: 2rem;
+  --font-size-clock: 5rem;
+  --font-size-repeat: 1.5rem;
+}

@@ -1,0 +1,100 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 1rem;
+
+  @supports (font-variation-settings: normal) {
+    html { font-family: 'Inter var', sans-serif; }
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+a {
+  color: inherit;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1rem;
+}
+
+button,
+input,
+select,
+textarea {
+  border: none;
+  font: inherit;
+  padding: 0;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  color: inherit;
+  outline: 0;
+}
+
+p {
+  margin-top: 0;
+}
+
+label {
+  font-size: inherit;
+}
+
+input,
+label,
+textarea {
+  font-family: inherit;
+  margin: 0;
+  outline: 0;
+}
+
+input:invalid,
+label:invalid,
+textarea:invalid {
+  outline: 0;
+  box-shadow: none;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+figure {
+  margin: 0;
+}
+
+[contenteditable]:focus {
+    outline: none;
+}
+
+.container {
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  box-sizing: border-box;
+}
