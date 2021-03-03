@@ -1,7 +1,8 @@
-import api from "../api";
-import { subscribe, listen, push } from "../services/pusher";
+import Vuex from "vuex";
+import api from "../../api";
+import { subscribe, listen, push } from "../../services/pusher";
 
-export default {
+export default new Vuex.Store({
   namespaced: true,
 
   state: {
@@ -154,4 +155,4 @@ export default {
       });
     }
   }
-};
+});

@@ -14,20 +14,20 @@
 </template>
 
 <script>
-import debounce from "../utils/debounce";
+import debounce from "../../utils/debounce";
 
 export default {
   computed: {
     items() {
-      return this.$store.state.server.playlists.items;
+      return this.$store.state.playlists.items;
     }
   },
   methods: {
     onPlaylistInput: debounce(function (event) {
-      this.$store.dispatch("server/search", event.target.value);
+      this.$store.dispatch("search", event.target.value);
     }, 500),
     selectPlaylist(id) {
-      this.$store.dispatch("server/playlist", id);
+      this.$store.dispatch("playlist", id);
     }
   }
 };

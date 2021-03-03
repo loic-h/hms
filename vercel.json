@@ -1,5 +1,7 @@
 {
   "routes": [
-    { "src": "/pusher/auth", "dest": "api/pusher-auth" }
+    { "src": "/pusher/auth", "dest": "api/pusher-auth" },
+    { "handle": "filesystem" },
+    { "src": "/play", "dest": "/play.html" }
   ]
 }

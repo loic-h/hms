@@ -10,8 +10,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Start from '../components/client/start';
-import Player from '../components/client/player';
+import Start from '../components/start';
+import Player from '../components/player';
 
 export default {
   name: 'Client',
@@ -20,10 +20,10 @@ export default {
     Player
   },
   computed: {
-    ...mapState('client', ['ready', 'name'])
+    ...mapState(['ready', 'name'])
   },
   created() {
-    this.$store.dispatch("client/load");
+    this.$store.dispatch("load");
   }
 };
 </script>

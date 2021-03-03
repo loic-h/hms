@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import Admin from '../views/Admin.vue';
-import Client from '../views/Client.vue';
-import NotFound from '../views/NotFound.vue';
+import NotFound from '../../shared/views/NotFound.vue';
 import store from '../store';
 
 const routes = [
@@ -11,24 +10,17 @@ const routes = [
     name: 'Home',
     component: Home
   },
+
   {
-    path: '/game/:id',
-    name: 'Client',
-    component: Client,
-    beforeEnter: (to) => {
-      store.commit("client/gameId", to.params.id);
-    }
-  },
-  {
-    path: '/game/:id/admin',
+    path: '/manage/:id',
     name: 'Admin',
     component: Admin,
     beforeEnter: async (to, from) => {
       const id = to.params.id;
-      if (id === store.state.server.playlists.id) {
+      if (id === store.state.playlists.id) {
         return true;
       }
-      const playlist = await store.dispatch('server/playlist', id);
+      const playlist = await store.dispatch('playlist', id);
       if (!playlist) {
         return { name: 'NotFound' };
       }

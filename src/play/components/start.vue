@@ -14,13 +14,13 @@ import { mapState } from "vuex";
 export default {
   name: "Start",
   computed: {
-    ...mapState('client', ['name'])
+    ...mapState(['name'])
   },
   methods: {
     onSubmit(e) {
       e.preventDefault();
       const name = e.target.elements.name.value;
-      this.$store.dispatch("client/ready", { name });
+      this.$store.dispatch("ready", { name });
     }
   }
 };

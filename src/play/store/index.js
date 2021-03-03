@@ -1,9 +1,8 @@
-import { listen, push, subscribe } from '../services/pusher';
+import Vuex from "vuex";
+import { listen, push, subscribe } from '../../services/pusher';
 import { v4 as uuid } from 'uuid';
 
-export default {
-  namespaced: true,
-
+export default new Vuex.Store({
   state: {
     id: null,
     name: null,
@@ -57,4 +56,4 @@ export default {
       });
     }
   }
-};
+});

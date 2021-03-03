@@ -10,7 +10,7 @@
 <script>
 import Tracks from "../components/tracks";
 import Clients from "../components/clients";
-import { unsubscribe } from "../services/pusher";
+import { unsubscribe } from "../../services/pusher";
 
 export default {
   name: 'Admin',
@@ -23,11 +23,11 @@ export default {
       return this.$route.params.id;
     },
     gameUrl() {
-      return new URL(`/game/${this.gameId}`, window.location.origin).toString();
+      return new URL(`/play/${this.gameId}`, window.location.origin).toString();
     }
   },
   mounted() {
-    this.$store.dispatch("server/room", this.$route.params.id);
+    this.$store.dispatch("room", this.$route.params.id);
   },
   beforeUnmount() {
     unsubscribe(this.$store.getters.server.playlists.id);

@@ -19,7 +19,7 @@ export default {
     ClientsItem
   },
   computed: {
-    ...mapState('server', ['clients'])
+    ...mapState(['clients'])
   }
 };
 </script>
