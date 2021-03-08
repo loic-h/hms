@@ -1,10 +1,10 @@
 <template>
-  <div class="home">
-    <h1>Create a game</h1>
+  <page class="home container">
+    <logo class="home__logo" />
+    <h1 class="home__headline h1 cursored">
+      {{ $options.title }}
+    </h1>
     <search />
-    <h3>
-      Tracks
-    </h3>
     <ul v-if="tracks.length > 0">
       <li
         v-for="item in tracks"
@@ -17,17 +17,23 @@
       :to="`/manage/${playlistId}`">
       Create
     </router-link>
-  </div>
+  </page>
 </template>
 
 <script>
-import Search from "../components/search";
+import Page from '../../shared/components/page';
+import Logo from '../../shared/components/logo';
+import Search from '../components/search';
+import globals from '../../utils/globals';
 
 export default {
   name: 'Home',
   components: {
+    Page,
+    Logo,
     Search
   },
+  title: globals.title,
   computed: {
     tracks() {
       return this.$store.state.tracks.items
@@ -38,3 +44,27 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 6rem;
+
+  &__logo {
+    @include icon(l);
+    margin-bottom: 1rem;
+
+    @include media(min-width, m) {
+      @include icon(xl);
+    }
+  }
+
+  &__headline {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+}
+</style>

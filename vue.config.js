@@ -1,17 +1,18 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const title = "The HMS Music Quiz";
 
 module.exports = {
   pages: {
     manage: {
       entry: 'src/manage/main.js',
       template: 'public/manage.html',
-      title: 'Manage',
+      title,
       chunks: [ 'chunk-vendors', 'chunk-common', 'manage' ]
     },
     play: {
       entry: 'src/play/main.js',
       template: 'public/play.html',
-      title: 'Play',
+      title,
       chunks: [ 'chunk-vendors', 'chunk-common', 'play' ]
     }
   },
@@ -19,12 +20,15 @@ module.exports = {
     config
       .plugin('html-manage')
       .tap(args => {
-        args[0].env = {
-          node: process.env.NODE_ENV,
-          pusher: {
-            key: process.env.PUSHER_KEY,
-            cluster: process.env.PUSHER_CLUSTER
-          }
+        args[0].globals = {
+          env: {
+            node: process.env.NODE_ENV,
+            pusher: {
+              key: process.env.PUSHER_KEY,
+              cluster: process.env.PUSHER_CLUSTER
+            }
+          },
+          title
         };
         return args;
       })
@@ -42,4 +46,13 @@ module.exports = {
         return args;
       })
   },
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: `
+          @import "@/styles/mixins/index.scss";
+        `
+      }
+    }
+  }
 }

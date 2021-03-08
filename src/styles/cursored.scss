@@ -1,0 +1,14 @@
+.cursored {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:after {
+    content: '';
+    display: block;
+    height: 0.2em;
+    width: 3em;
+    background-color: var(--black);
+    margin-top: 0.75em;
+  }
+}

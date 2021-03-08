@@ -1,0 +1,9 @@
+.h1 {
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  font-size: 1.5rem;
+
+  @include media(min-width, m) {
+    font-size: 2rem;
+  }
+}

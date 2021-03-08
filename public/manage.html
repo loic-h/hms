@@ -7,12 +7,11 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
     </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script>
-      window.globals = {
-        env: JSON.parse('<%= JSON.stringify(htmlWebpackPlugin.options.env) %>')
-      };
+      window.globals = JSON.parse('<%= JSON.stringify(htmlWebpackPlugin.options.globals) %>');
     </script>
   </head>
   <body>

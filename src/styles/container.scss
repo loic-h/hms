@@ -1,0 +1,11 @@
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-left: var(--container-padding-xs);
+  padding-right: var(--container-padding-xs);
+
+  @include media(min-width, s) {
+    padding-left: var(--container-padding-s);
+    padding-right: var(--container-padding-s);
+  }
+}

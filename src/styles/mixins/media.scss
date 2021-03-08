@@ -1,0 +1,25 @@
+$media-break-xs: 320px;
+$media-break-s: 414px;
+$media-break-m: 768px;
+$media-break-l: 1024px;
+
+$media-breaks: (
+  xs: $media-break-xs,
+  s: $media-break-s,
+  m: $media-break-m,
+  l: $media-break-l
+);
+
+@mixin media($feature, $size) {
+  $break: map-get($media-breaks, $size);
+
+  @if $feature == max-width {
+    $break: $break - 1px;
+  }
+
+  $query: "(#{$feature}: #{$break})";
+
+  @media #{$query} {
+    @content;
+  }
+}

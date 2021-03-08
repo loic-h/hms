@@ -1,0 +1,19 @@
+@mixin icon($size: m) {
+  @if $size == s {
+    font-size: 18px;
+  }
+  @else if $size == m {
+    font-size: 24px;
+  }
+  @else if $size == l {
+    font-size: 36px;
+  }
+  @else if $size == xl {
+    font-size: 48px;
+  }
+}
+
+.material-icons.md-18 { @include icon(s); }
+.material-icons.md-24 { @include icon(m); }
+.material-icons.md-36 { @include icon(l); }
+.material-icons.md-48 { @include icon(xl); }

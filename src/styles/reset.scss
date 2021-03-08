@@ -8,6 +8,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
   font-size: 1rem;
+  display: flex;
+  flex-direction: column;
 
   @supports (font-variation-settings: normal) {
     html { font-family: 'Inter var', sans-serif; }
@@ -91,10 +93,4 @@ figure {
 
 [contenteditable]:focus {
     outline: none;
-}
-
-.container {
-  padding-left: var(--container-padding);
-  padding-right: var(--container-padding);
-  box-sizing: border-box;
 }
