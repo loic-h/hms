@@ -1,11 +1,20 @@
 import Vuex from "vuex";
 import { listen, push, subscribe } from '../../services/pusher';
 import { v4 as uuid } from 'uuid';
+import VuexPersistence from 'vuex-persist'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage,
+  reducer: state => ({
+    id: state.id,
+    name: state.name
+  })
+});
 
 export default new Vuex.Store({
   state: {
     id: null,
-    name: null,
+    name: "",
     ready: false,
     gameId: null
   },
@@ -31,12 +40,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    load: ({ commit }) => {
-      const id = localStorage.getItem('playerId') || uuid();
-      const name = localStorage.getItem('playerName');
-      commit('id', id);
-      commit('name', name);
-    },
     ready: ({ state, commit, dispatch }, { name }) => {
       commit('ready', true);
       commit('name', name);
@@ -55,5 +58,7 @@ export default new Vuex.Store({
         name: state.name
       });
     }
-  }
+  },
+
+  plugins: [vuexLocal.plugin]
 });

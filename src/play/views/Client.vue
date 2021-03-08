@@ -21,9 +21,6 @@ export default {
   },
   computed: {
     ...mapState(['ready', 'name'])
-  },
-  created() {
-    this.$store.dispatch("load");
   }
 };
 </script>
