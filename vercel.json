@@ -2,6 +2,7 @@
   "routes": [
     { "src": "/pusher/auth", "dest": "api/pusher-auth" },
     { "handle": "filesystem" },
-    { "src": "/play", "dest": "/play.html" }
+    { "src": "/play", "dest": "/play.html" },
+    { "src": "/", "dest": "/manage.html" }
   ]
 }
