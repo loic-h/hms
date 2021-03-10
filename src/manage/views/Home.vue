@@ -1,10 +1,11 @@
 <template>
   <page class="home container">
-    <logo class="home__logo" />
-    <h1 class="home__headline h1 cursored">
-      {{ $options.title }}
-    </h1>
-    <playlist-preview v-if="tracks.length > 0" />
+    <div class="home__logo cursored">
+      <logo type="big" />
+    </div>
+    <tracklist
+      v-if="tracks.length > 0"
+      :controls="true" />
     <search v-else />
   </page>
 </template>
@@ -13,8 +14,7 @@
 import Page from '../../shared/components/page';
 import Logo from '../../shared/components/logo';
 import Search from '../components/search';
-import PlaylistPreview from '../components/playlist-preview';
-import globals from '../../utils/globals';
+import Tracklist from '../components/tracklist';
 
 export default {
   name: 'Home',
@@ -22,9 +22,8 @@ export default {
     Page,
     Logo,
     Search,
-    PlaylistPreview
+    Tracklist
   },
-  title: globals.title,
   computed: {
     tracks() {
       return this.$store.state.tracks.items
@@ -42,17 +41,7 @@ export default {
   padding-bottom: 6rem;
 
   &__logo {
-    @include icon(l);
-    margin-bottom: 1rem;
-
-    @include media(min-width, m) {
-      @include icon(xl);
-    }
-  }
-
-  &__headline {
     margin-bottom: 3rem;
-    text-align: center;
   }
 }
 </style>

@@ -117,8 +117,8 @@ export default new Vuex.Store({
       let body;
       try {
         body = await api.playlist({ id })
-        commit('playlists', { name });
         const items = body.items.map(a => ({ ...a, artist: a.artists.join(', ') }));
+        commit('playlists', { name: body.name });
         commit('tracks', { items });
       } catch(err) {
         commit('tracks', { error: err });

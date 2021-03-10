@@ -6,6 +6,6 @@
 #app {
   flex-grow: 1;
   display: flex;
-  flex-direction: 1;
+  flex-direction: column;
 }
 </style>

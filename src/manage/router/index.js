@@ -20,9 +20,10 @@ const routes = [
       if (id === store.state.playlists.id) {
         return true;
       }
-      const playlist = await store.dispatch('playlist', id);
+      const playlist = await store.dispatch('playlist', { id });
+      console.log(id, playlist)
       if (!playlist) {
-        return { name: 'NotFound' };
+        // return { name: 'NotFound' };
       }
       return true;
     }

@@ -1,15 +1,17 @@
 <template>
   <div
-    class="playlist-preview-item"
+    class="tracklist-item"
     :class="{
-      'playlist-preview-item--disabled': !preview,
-      'playlist-preview-item--playing': isPlaying(preview)
+      'tracklist-item--disabled': !preview,
+      'tracklist-item--playing': isPlaying(preview)
     }">
-    <div class="playlist-preview-item__infos">
+    <div class="tracklist-item__infos">
       <h3>{{ name }}</h3>
       <span>{{ artist }}</span>
     </div>
-    <div class="playlist-preview-item__controls">
+    <div
+      v-if="controls"
+      class="tracklist-item__controls">
       <template v-if="preview">
         <button @click="pause(preview)" class="material-icons" v-if="isPlaying(preview)">pause_circle_filled</button>
         <button @click="play(preview)" class="material-icons" v-else>play_circle_filled</button>
@@ -27,7 +29,8 @@ export default {
     id: { type: String, default: null },
     name: { type: String, default: null },
     artist: { type: String, default: null },
-    preview: { type: String, default: null }
+    preview: { type: String, default: null },
+    controls: { type: Boolean, default: false }
   },
   computed: {
     ...mapGetters('audio', ['isPlaying'])
@@ -47,25 +50,34 @@ export default {
 </script>
 
 <style lang='scss'>
-.playlist-preview-item {
+.tracklist-item {
   $root: &;
 
   display: flex;
   align-items: center;
   padding: 1rem;
   border-radius: var(--border-radius);
+  box-sizing: border-box;
+  width: 100%;
 
   &__infos {
     flex-grow: 1;
+    overflow: hidden;
   }
 
   h3 {
     font-size: 1rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   span {
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__controls {
