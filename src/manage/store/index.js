@@ -1,10 +1,9 @@
-import Vuex from "vuex";
-import api from "../../api";
-import { subscribe, listen, push } from "../../services/pusher";
+import Vuex from 'vuex';
+import api from '../../api';
+import { subscribe, listen, push } from '../../services/pusher';
+import audioStore from '../../shared/stores/audio';
 
 export default new Vuex.Store({
-  namespaced: true,
-
   state: {
     spotify: {
       connected: false,
@@ -12,7 +11,9 @@ export default new Vuex.Store({
       error: null
     },
     playlists: {
+      query: null,
       id: null,
+      name: [],
       items: [],
       loading: false,
       error: null
@@ -22,13 +23,13 @@ export default new Vuex.Store({
       loading: false,
       error: null
     },
-    clients: [],
-    /* {
-      id: String,
-      name: String,
-      messages
-    } */
-    playing: null,
+    clients: [
+      /* {
+        id: String,
+        name: String,
+        messages
+      } */
+    ]
   },
 
   mutations: {
@@ -71,10 +72,6 @@ export default new Vuex.Store({
         ];
       }
       state.clients = [...items];
-    },
-
-    playing: (state, payload) => {
-      state.playing = payload;
     }
   },
 
@@ -86,47 +83,47 @@ export default new Vuex.Store({
 
   actions: {
     token: async ({ commit }) => {
-      commit("spotify", { loading: true });
+      commit('spotify', { loading: true });
       let connected;
       try {
         await api.connect();
         connected = true;
-        commit("spotify", { connected });
+        commit('spotify', { connected });
       } catch(err) {
-        commit("spotify", { error: err });
+        commit('spotify', { error: err });
       }
-      commit("spotify", { loading: false });
+      commit('spotify', { loading: false });
       return connected;
     },
 
     search: ({ commit }, payload) => {
-      commit("playlists", { loading: true });
+      commit('playlists', { query: payload, loading: true });
       api.search({ query: payload, type: 'playlist' })
         .then(body => {
-          commit("playlists", {
+          commit('playlists', {
             items: body.items
           });
         })
         .catch(err => {
-          commit("playlists", { error: err });
+          commit('playlists', { error: err });
         }).finally(() => {
-          commit("playlists", { loading: false });
+          commit('playlists', { loading: false });
         });
     },
 
-    playlist: async ({ commit }, payload) => {
-      commit("playlists", { id: payload, items: [] });
-      commit("tracks", { loading: true });
+    playlist: async ({ commit }, { id, name }) => {
+      commit('playlists', { id });
+      commit('tracks', { loading: true });
       let body;
       try {
-        body = await api.playlist({ id: payload })
-        commit("tracks", {
-          items: body.items
-        });
+        body = await api.playlist({ id })
+        commit('playlists', { name });
+        const items = body.items.map(a => ({ ...a, artist: a.artists.join(', ') }));
+        commit('tracks', { items });
       } catch(err) {
-        commit("tracks", { error: err });
+        commit('tracks', { error: err });
       }
-      commit("tracks", { loading: false });
+      commit('tracks', { loading: false });
       return body;
     },
 
@@ -136,23 +133,31 @@ export default new Vuex.Store({
           // Reconnect clients
           push(`room-${getters.gameId}`, {});
           listen(`join-${getters.gameId}`, ({ name, id }) => {
-            commit("client", { name, id });
+            commit('client', { name, id });
           });
         });
     },
 
     play: ({ state, commit }, payload) => {
-      commit("playing", payload);
-      push("play", {
+      commit('audio/play');
+      push('play', {
         url: payload
       });
     },
 
     pause: ({ state, commit }, payload) => {
-      commit("playing", null);
-      push("pause", {
+      commit('audio/pause');
+      push('pause', {
         url: payload
       });
+    },
+
+    resetTracks: ({ commit }) => {
+      commit('tracks', { items: [] });
     }
+  },
+
+  modules: {
+    audio: audioStore
   }
 });

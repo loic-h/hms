@@ -4,19 +4,8 @@
     <h1 class="home__headline h1 cursored">
       {{ $options.title }}
     </h1>
-    <search />
-    <ul v-if="tracks.length > 0">
-      <li
-        v-for="item in tracks"
-        :key="item.id">
-        {{ item.artists.join(', ') }} – {{ item.name }}
-      </li>
-    </ul>
-    <router-link
-      v-if="playlistId"
-      :to="`/manage/${playlistId}`">
-      Create
-    </router-link>
+    <playlist-preview v-if="tracks.length > 0" />
+    <search v-else />
   </page>
 </template>
 
@@ -24,6 +13,7 @@
 import Page from '../../shared/components/page';
 import Logo from '../../shared/components/logo';
 import Search from '../components/search';
+import PlaylistPreview from '../components/playlist-preview';
 import globals from '../../utils/globals';
 
 export default {
@@ -31,15 +21,13 @@ export default {
   components: {
     Page,
     Logo,
-    Search
+    Search,
+    PlaylistPreview
   },
   title: globals.title,
   computed: {
     tracks() {
       return this.$store.state.tracks.items
-    },
-    playlistId() {
-      return this.$store.state.playlists.id
     }
   }
 };

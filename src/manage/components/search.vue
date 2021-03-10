@@ -2,12 +2,13 @@
   <div class="search">
     <input-text
       placeholder="Search for a playlist on spotify"
+      :value="query"
       @update="onPlaylistInput" />
     <ul v-if="items.length > 0">
       <li
         v-for="item in items"
         :key="item.id">
-        <button @click="selectPlaylist(item.id)">
+        <button @click="selectPlaylist(item)">
           {{ item.name }}
         </button>
       </li>
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import InputText from '../../shared/components/input-text';
 import debounce from '../../utils/debounce';
 
@@ -25,16 +27,17 @@ export default {
     InputText
   },
   computed: {
-    items() {
-      return this.$store.state.playlists.items;
-    }
+    ...mapState({
+      items: state => state.playlists.items,
+      query: state => state.playlists.query
+    })
   },
   methods: {
     onPlaylistInput: debounce(function (value) {
       this.$store.dispatch("search", value);
     }, 500),
-    selectPlaylist(id) {
-      this.$store.dispatch("playlist", id);
+    selectPlaylist(item) {
+      this.$store.dispatch("playlist", item);
     }
   }
 };
@@ -61,7 +64,7 @@ export default {
       button {
         @include ease;
         width: 100%;
-        border: solid 1px var(--grey-light);
+        background-color: var(--grey-pale);
         border-radius: var(--border-radius);
         padding: 1.5rem 1rem;
         text-align: center;
