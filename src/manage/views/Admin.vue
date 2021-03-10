@@ -10,6 +10,12 @@
         </h1>
       </div>
     </header>
+    <div class="admin__share">
+      <div class="admin__link" ref="link">
+        {{ gameUrl }}
+      </div>
+      <div @click="copy" class="material-icons admin__copy">content_copy</div>
+    </div>
     <main>
       <div class="admin__tracks">
         <h3 class="admin__section-headline h3">
@@ -33,14 +39,17 @@ import { mapState } from 'vuex';
 import Tracklist from '../components/tracklist';
 import Clients from '../components/clients';
 import Logo from '../../shared/components/logo';
+import InputText from '../../shared/components/input-text';
 import { unsubscribe } from '../../services/pusher';
+import copy from '../../utils/copy';
 
 export default {
   name: 'Admin',
   components: {
     Tracklist,
     Clients,
-    Logo
+    Logo,
+    InputText
   },
   computed: {
     ...mapState({
@@ -58,6 +67,11 @@ export default {
   },
   beforeUnmount() {
     unsubscribe(this.$store.getters.gameId);
+  },
+  methods: {
+    copy() {
+      copy(this.gameUrl);
+    }
   }
 }
 </script>
@@ -86,6 +100,28 @@ export default {
   &__title {
     display: flex;
     flex-grow: 1;
+  }
+
+  &__share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &__link {
+    border-radius: var(--border-radius);
+    border: 1px solid var(--grey-light);
+    padding: 1rem;
+    margin-right: 0.5rem;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &__copy {
+    cursor: pointer;
   }
 
   &__section-headline {
