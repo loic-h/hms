@@ -1,5 +1,7 @@
 <template>
-  <tracklist />
+  <tracklist
+    :controls="true"
+    :selectPlaying="true" />
   <div class="playlist-preview__footer">
     <cta class="playlist-preview__cta" :href="`/manage/${id}`">
       Create

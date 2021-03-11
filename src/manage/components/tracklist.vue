@@ -8,13 +8,13 @@
       :artist="item.artist"
       :preview="item.preview"
       :controls="controls"
-      :selected="trackId === item.id"
+      :selected="trackId === item.id || (selectPlaying && isPlaying(item.preview))"
       @click="onItemClick(item)" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import TracklistItem from "./tracklist-item";
 
 export default {
@@ -23,13 +23,15 @@ export default {
     TracklistItem
   },
   props: {
-    controls: { type: Boolean, default: false }
+    controls: { type: Boolean, default: false },
+    selectPlaying: { type: Boolean, default: false }
   },
   computed: {
     ...mapState({
       tracks: state => state.tracks.items,
       trackId: state => state.tracks.id
-    })
+    }),
+    ...mapGetters('audio', ['isPlaying'])
   },
   methods: {
     onItemClick(item) {

@@ -3,7 +3,7 @@
     class="tracklist-item"
     :class="{
       'tracklist-item--disabled': !preview,
-      'tracklist-item--selected': selected || isPlaying(preview)
+      'tracklist-item--selected': selected
     }">
     <div class="tracklist-item__infos">
       <h3>{{ name }}</h3>
