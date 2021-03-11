@@ -118,7 +118,6 @@ const manageStore = {
     },
 
     user: (state, payload) => {
-      console.log('commit user', payload)
       if (!payload.id) {
         return;
       }
@@ -148,6 +147,10 @@ const manageStore = {
         };
         state.users = [ ...users ];
       }
+    },
+
+    removeUser: (state, payload) => {
+      state.users = [...state.users.filter(a => a.id !== payload)];
     }
   },
 
@@ -192,12 +195,12 @@ const manageStore = {
     },
 
     gameUsers: (state, getters) => {
-      console.log(state.users)
       return state.users.filter(a => a.gameIds && a.gameIds.includes(getters.gameId))
         .map(a => ({
           ...a,
-          score: a.scores[getters.gameId]
-        }));
+          score: a.scores[getters.gameId] || 0
+        }))
+        .sort((a, b) => b - a);
     }
   },
 

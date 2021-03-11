@@ -1,10 +1,11 @@
 <template>
-  <div class="clients">
+  <div class="users">
     <users-item
       v-for="item in gameUsers"
       :key="item.id"
       :id="item.id"
-      :name="item.name" />
+      :name="item.name"
+      :score="item.score" />
   </div>
 </template>
 
@@ -19,6 +20,17 @@ export default {
   },
   computed: {
     ...mapGetters(['gameUsers'])
+  },
+  mounted() {
+    console.log(this.gameUsers)
   }
 };
 </script>
+
+<style lang="scss">
+.users {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+</style>

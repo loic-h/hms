@@ -169,6 +169,7 @@ export default {
   &__section-headline {
     display: flex;
     align-items: center;
+    padding-left: 1rem;
 
     > div {
       margin-right: 0.25rem;
