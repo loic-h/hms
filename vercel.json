@@ -1,8 +1,7 @@
 {
-  "routes": [
-    { "src": "/pusher/auth", "dest": "api/pusher-auth" },
-    { "handle": "filesystem" },
-    { "src": "/play*", "dest": "/play.html" },
-    { "src": "/*", "dest": "/manage.html" }
+  "rewrites": [
+    { "source": "/pusher/auth", "destination": "api/pusher-auth" },
+    { "source": "/play", "destination": "/play.html" },
+    { "source": "/", "destination": "/manage.html" }
   ]
 }
