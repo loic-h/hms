@@ -11,10 +11,11 @@
         </span>
       </div>
     </div>
-    <div class="track-section__controls">
-      <button @click="pause" class="material-icons" v-if="isPlaying(selectedTrack.preview)">pause_circle_outline</button>
-      <button @click="play" class="material-icons" v-else>play_circle_outline</button>
-    </div>
+    <play-button
+      class="track-section__controls"
+      :playing="isPlaying(selectedTrack.id)"
+      @play="play"
+      @pause="pause" />
     <div class="track-section__infos">
       <h2 class="track-section__name h1">{{ selectedTrack.name }}</h2>
       <div class="track-section__artist">{{ selectedTrack.artist }}</div>
@@ -23,10 +24,14 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
+import PlayButton from './play-button';
 
 export default {
   name: 'TrackSection',
+  components: {
+    PlayButton
+  },
   computed: {
     ...mapGetters(['selectedTrack', 'totalAvailableTracks', 'trackPosition']),
     ...mapGetters('audio', ['isPlaying'])

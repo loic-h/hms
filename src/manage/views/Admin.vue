@@ -40,8 +40,8 @@
         <users class="admin__users" />
       </div>
     </main>
-
   </div>
+  <player />
 </template>
 
 <script>
@@ -49,6 +49,7 @@ import { mapState } from 'vuex';
 import Tracklist from '../components/tracklist';
 import TrackSection from '../components/track-section';
 import Users from '../components/users';
+import Player from '../components/player';
 import Logo from '../../shared/components/logo';
 import InputText from '../../shared/components/input-text';
 import { unsubscribe } from '../../services/pusher';
@@ -61,7 +62,8 @@ export default {
     TrackSection,
     Users,
     Logo,
-    InputText
+    InputText,
+    Player
   },
   computed: {
     ...mapState({

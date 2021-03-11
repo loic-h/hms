@@ -13,7 +13,6 @@
 import Page from '../../shared/components/page';
 import Logo from '../../shared/components/logo';
 import Search from '../components/search';
-import Tracklist from '../components/tracklist';
 import PlaylistPreview from '../components/playlist-preview';
 
 export default {
@@ -38,7 +37,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 6rem;
 
   &__logo {
     margin-bottom: 3rem;

@@ -168,7 +168,7 @@ export default new Vuex.Store({
 
     play: ({ getters, dispatch }, payload) => {
       const { preview } = getters.trackById(payload)
-      dispatch('audio/play', preview, { root: true });
+      dispatch('audio/play', payload, { root: true });
       push('play', {
         url: preview
       });

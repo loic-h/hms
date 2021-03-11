@@ -9,22 +9,24 @@
       <h3>{{ name }}</h3>
       <span>{{ artist }}</span>
     </div>
-    <div
-      v-if="controls"
-      class="tracklist-item__controls">
-      <template v-if="preview">
-        <button @click="pause(preview)" class="material-icons" v-if="isPlaying(preview)">pause_circle_filled</button>
-        <button @click="play(preview)" class="material-icons" v-else>play_circle_filled</button>
-      </template>
-    </div>
+    <play-button
+      v-if="controls && preview"
+      class="tracklist-item__controls"
+      :playing="isPlaying(id)"
+      @play="play(id)"
+      @pause="pause" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import PlayButton from './play-button';
 
 export default {
   name: 'PlaylistPreviewItem',
+  components: {
+    PlayButton
+  },
   props: {
     id: { type: String, default: null },
     name: { type: String, default: null },
@@ -40,8 +42,8 @@ export default {
     onBackClick() {
       this.$store.dispatch('resetTracks');
     },
-    play(url) {
-      this.$store.dispatch('audio/play', url);
+    play(id) {
+      this.$store.dispatch('audio/play', id);
     },
     pause() {
       this.$store.dispatch('audio/pause');

@@ -23,7 +23,10 @@ export default {
   computed: {
     ...mapState({
       id: state => state.playlists.id
-    })
+    }),
+  },
+  beforeUnmount() {
+    this.$store.dispatch('audio/stop');
   }
 }
 </script>
@@ -39,10 +42,6 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  &__cta {
-
   }
 }
 </style>
