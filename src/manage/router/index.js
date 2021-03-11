@@ -12,18 +12,22 @@ const routes = [
   },
 
   {
+    path: '/create/:playlistId',
+    name: 'Create',
+    beforeEnter: async (to) => {
+      const { playlistId } = to.params;
+      const game = await store.dispatch('game', { playlistId });
+      return { path: `/manage/${game.id}` };
+    }
+  },
+
+  {
     path: '/manage/:id/:trackId?',
     name: 'Admin',
     component: Admin,
     beforeEnter: async (to, from) => {
       const { id } = to.params;
-      if (id === store.state.playlists.id) {
-        return true;
-      }
-      const playlist = await store.dispatch('playlist', { id });
-      if (!playlist) {
-        // return { name: 'NotFound' };
-      }
+      await store.dispatch('game', { id });
       return true;
     },
   },
@@ -36,10 +40,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes,
-  beforeRouteUpdate: (to, from) => {
-    store.commit('tracks', { id: to.params.trackId});
-  }
+  routes
 });
 
 export default router

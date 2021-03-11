@@ -2,6 +2,15 @@ import Vuex from 'vuex';
 import api from '../../api';
 import { subscribe, listen, push } from '../../services/pusher';
 import audioStore from '../../shared/stores/audio';
+import { nanoid } from 'nanoid';
+import VuexPersistence from 'vuex-persist';
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage,
+  reducer: state => ({
+    games: state.games
+  })
+});
 
 export default new Vuex.Store({
   state: {
@@ -12,7 +21,6 @@ export default new Vuex.Store({
     },
     playlists: {
       query: null,
-      id: null,
       name: [],
       items: [],
       loading: false,
@@ -24,13 +32,16 @@ export default new Vuex.Store({
       loading: false,
       error: null
     },
-    clients: [
-      /* {
+    games: {
+      id: null,
+      items: [
+        /* {
         id: String,
-        name: String,
-        messages
+        playlistId: String,
+        users: []
       } */
-    ]
+      ]
+    }
   },
 
   mutations: {
@@ -53,6 +64,23 @@ export default new Vuex.Store({
         ...state.tracks,
         ...payload
       };
+    },
+
+    game: (state, payload) => {
+      state.games.id = payload;
+    },
+
+    newGame: (state, payload) => {
+      if (state.games.items.find(a => a.id === payload.id)) {
+        return;
+      }
+      state.games.items = [
+        ...state.games.items,
+        {
+          ...payload,
+          users: []
+        }
+      ]
     },
 
     client: (state, payload) => {
@@ -81,11 +109,11 @@ export default new Vuex.Store({
       return state.playlists.id
     },
 
-    firstTrackId: (state) => {
-      if (state.tracks.items.length <= 0) {
+    firstAvailableTrackId: (state, getters) => {
+      if (getters.availableTracks.length <= 0) {
         return;
       }
-      return state.tracks.items[0].id;
+      return getters.availableTracks[0].id;
     },
 
     trackById: (state) => id => {
@@ -106,6 +134,10 @@ export default new Vuex.Store({
 
     trackPosition: (state, getters) => id => {
       return getters.availableTracks.findIndex(a => a.id === id) + 1;
+    },
+
+    gameById: (state) => id => {
+      return state.games.items.find(a => a.id === id);
     }
   },
 
@@ -140,6 +172,7 @@ export default new Vuex.Store({
     },
 
     playlist: async ({ commit }, { id }) => {
+      const gameId =
       commit('playlists', { id });
       commit('tracks', { loading: true });
       let body;
@@ -153,6 +186,21 @@ export default new Vuex.Store({
       }
       commit('tracks', { loading: false });
       return body;
+    },
+
+    game: async ({ getters, commit, dispatch }, { id, playlistId }) => {
+      if (!id) {
+        id = await dispatch('newGame', playlistId);
+      }
+      const game = getters.gameById(id);
+      commit('game', game.id);
+      await dispatch('playlist', { id: game.playlistId });
+    },
+
+    newGame: ({ commit }, playlistId) => {
+      const id = nanoid(6);
+      commit('newGame', { id, playlistId });
+      return id;
     },
 
     room: async ({ getters, commit }) => {
@@ -188,5 +236,7 @@ export default new Vuex.Store({
 
   modules: {
     audio: audioStore
-  }
+  },
+
+  plugins: [vuexLocal.plugin]
 });

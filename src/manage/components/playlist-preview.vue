@@ -3,7 +3,7 @@
     :controls="true"
     :selectPlaying="true" />
   <div class="playlist-preview__footer">
-    <cta class="playlist-preview__cta" :href="`/manage/${id}`">
+    <cta class="playlist-preview__cta" :href="`/create/${playlistId}`">
       Create
     </cta>
   </div>
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     ...mapState({
-      id: state => state.playlists.id
+      playlistId: state => state.playlists.id
     }),
   },
   beforeUnmount() {

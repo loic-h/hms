@@ -66,8 +66,10 @@ export default {
     },
 
     stop: ({ commit }) => {
-      audio.src = '';
-      audio = null;
+      if (audio) {
+        audio.src = '';
+        audio = null;
+      }
       commit('id', null);
       commit('playing', false);
     }
