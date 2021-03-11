@@ -9,7 +9,7 @@
       :preview="item.preview"
       :controls="controls"
       :selected="trackId === item.id"
-      @click="onItemClick(item.id)" />
+      @click="onItemClick(item)" />
   </div>
 </template>
 
@@ -32,8 +32,11 @@ export default {
     })
   },
   methods: {
-    onItemClick(id) {
-      this.$emit('item-click', id);
+    onItemClick(item) {
+      if (!item.preview) {
+        return;
+      }
+      this.$emit('item-click', item.id);
     }
   }
 }
