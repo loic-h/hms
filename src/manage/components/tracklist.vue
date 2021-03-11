@@ -7,7 +7,9 @@
       :name="item.name"
       :artist="item.artist"
       :preview="item.preview"
-      :controls="controls" />
+      :controls="controls"
+      :selected="trackId === item.id"
+      @click="onItemClick(item.id)" />
   </div>
 </template>
 
@@ -25,9 +27,15 @@ export default {
   },
   computed: {
     ...mapState({
-      tracks: state => state.tracks.items
+      tracks: state => state.tracks.items,
+      trackId: state => state.tracks.id
     })
   },
+  methods: {
+    onItemClick(id) {
+      this.$emit('item-click', id);
+    }
+  }
 }
 </script>
 

@@ -12,21 +12,20 @@ const routes = [
   },
 
   {
-    path: '/manage/:id',
+    path: '/manage/:id/:trackId?',
     name: 'Admin',
     component: Admin,
     beforeEnter: async (to, from) => {
-      const id = to.params.id;
+      const { id } = to.params;
       if (id === store.state.playlists.id) {
         return true;
       }
       const playlist = await store.dispatch('playlist', { id });
-      console.log(id, playlist)
       if (!playlist) {
         // return { name: 'NotFound' };
       }
       return true;
-    }
+    },
   },
   {
     path: '/404',
@@ -37,7 +36,10 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  beforeRouteUpdate: (to, from) => {
+    store.commit('tracks', { id: to.params.trackId});
+  }
 });
 
 export default router

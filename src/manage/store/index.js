@@ -19,6 +19,7 @@ export default new Vuex.Store({
       error: null
     },
     tracks: {
+      id: null,
       items: [],
       loading: false,
       error: null
@@ -78,6 +79,33 @@ export default new Vuex.Store({
   getters: {
     gameId: (state) => {
       return state.playlists.id
+    },
+
+    firstTrackId: (state) => {
+      if (state.tracks.items.length <= 0) {
+        return;
+      }
+      return state.tracks.items[0].id;
+    },
+
+    trackById: (state) => id => {
+      return state.tracks.items.find(a => a.id === id);
+    },
+
+    selectedTrack: (state, getters) => {
+      return getters.trackById(state.tracks.id);
+    },
+
+    availableTracks: (state) => {
+      return state.tracks.items.filter(a => a.preview);
+    },
+
+    totalAvailableTracks: (state, getters) => {
+      return getters.availableTracks.length;
+    },
+
+    trackPosition: (state, getters) => id => {
+      return getters.availableTracks.findIndex(a => a.id === id) + 1;
     }
   },
 
@@ -111,7 +139,7 @@ export default new Vuex.Store({
         });
     },
 
-    playlist: async ({ commit }, { id, name }) => {
+    playlist: async ({ commit }, { id }) => {
       commit('playlists', { id });
       commit('tracks', { loading: true });
       let body;
@@ -138,15 +166,16 @@ export default new Vuex.Store({
         });
     },
 
-    play: ({ state, commit }, payload) => {
-      commit('audio/play');
+    play: ({ getters, dispatch }, payload) => {
+      const { preview } = getters.trackById(payload)
+      dispatch('audio/play', preview, { root: true });
       push('play', {
-        url: payload
+        url: preview
       });
     },
 
-    pause: ({ state, commit }, payload) => {
-      commit('audio/pause');
+    pause: ({ state, dispatch }, payload) => {
+      dispatch('audio/pause', null, { root: true });
       push('pause', {
         url: payload
       });

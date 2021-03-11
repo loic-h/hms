@@ -3,7 +3,7 @@
     class="tracklist-item"
     :class="{
       'tracklist-item--disabled': !preview,
-      'tracklist-item--playing': isPlaying(preview)
+      'tracklist-item--selected': selected || isPlaying(preview)
     }">
     <div class="tracklist-item__infos">
       <h3>{{ name }}</h3>
@@ -30,7 +30,8 @@ export default {
     name: { type: String, default: null },
     artist: { type: String, default: null },
     preview: { type: String, default: null },
-    controls: { type: Boolean, default: false }
+    controls: { type: Boolean, default: false },
+    selected: { type: Boolean, default: false }
   },
   computed: {
     ...mapGetters('audio', ['isPlaying'])
@@ -85,7 +86,7 @@ export default {
     color: var(--grey-light);
   }
 
-  &:hover:not(&--disabled):not(&--playing) {
+  &:hover:not(&--disabled):not(&--selected) {
     background-color: var(--grey-pale);
 
     #{$root}__controls {
@@ -98,7 +99,11 @@ export default {
     text-decoration: line-through;
   }
 
-  &--playing {
+  &:not(&--disabled) {
+    cursor: pointer;
+  }
+
+  &--selected {
     background-color: var(--black);
     color: var(--white);
 

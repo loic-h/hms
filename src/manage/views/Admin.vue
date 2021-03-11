@@ -10,26 +10,36 @@
         </h1>
       </div>
     </header>
+
     <div class="admin__share">
       <div class="admin__link" ref="link">
         {{ gameUrl }}
       </div>
       <div @click="copy" class="material-icons admin__copy">content_copy</div>
     </div>
-    <main>
+
+    <main class="admin__main">
       <div class="admin__tracks">
         <h3 class="admin__section-headline h3">
           <div class="material-icons">queue_music</div>
           <span>Tracklist</span>
         </h3>
-        <tracklist />
+        <tracklist
+          @item-click="onItemClick"/>
+      </div>
+
+      <div class="admin__track">
+        <track-section />
+      </div>
+
+      <div class="admin__players">
+        <h3 class="admin__section-headline h3">
+          <div class="material-icons">group</div>
+          <span>Players</span>
+        </h3>
+        <users class="admin__users" />
       </div>
     </main>
-  </div>
-  <div class="login">
-    <h1>Manage the game</h1>
-    <p>Share link: <a :href="gameUrl">{{ gameUrl }}</a></p>
-    <clients />
 
   </div>
 </template>
@@ -37,7 +47,8 @@
 <script>
 import { mapState } from 'vuex';
 import Tracklist from '../components/tracklist';
-import Clients from '../components/clients';
+import TrackSection from '../components/track-section';
+import Users from '../components/users';
 import Logo from '../../shared/components/logo';
 import InputText from '../../shared/components/input-text';
 import { unsubscribe } from '../../services/pusher';
@@ -47,7 +58,8 @@ export default {
   name: 'Admin',
   components: {
     Tracklist,
-    Clients,
+    TrackSection,
+    Users,
     Logo,
     InputText
   },
@@ -71,6 +83,9 @@ export default {
   methods: {
     copy() {
       copy(this.gameUrl);
+    },
+    onItemClick(id) {
+      this.$router.push(`/manage/${this.gameId}/${id}`);
     }
   }
 }
@@ -122,6 +137,31 @@ export default {
 
   &__copy {
     cursor: pointer;
+  }
+
+  &__main {
+    display: flex;
+
+    > div {
+
+      &:not(:last-child) {
+        margin-right: 1.5rem;
+      }
+    }
+  }
+
+  &__tracks {
+    width: 20rem;
+    max-width: 20%;
+  }
+
+  &__track {
+    flex-grow: 1;
+  }
+
+  &__players {
+    width: 20rem;
+    max-width: 20%;
   }
 
   &__section-headline {

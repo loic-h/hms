@@ -2,6 +2,19 @@
   <router-view/>
 </template>
 
+<script>
+export default {
+  watch: {
+    '$route' (to, from) {
+      if(to.name === 'Admin') {
+        const id = to.params.trackId || this.$store.getters.firstTrackId;
+        this.$store.commit('tracks', { id });
+      }
+    }
+  }
+}
+</script>
+
 <style>
 #app {
   flex-grow: 1;
