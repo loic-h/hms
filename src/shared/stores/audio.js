@@ -27,6 +27,9 @@ export default {
   actions: {
     src: ({ commit }, payload) => {
       commit('src', payload)
+      if (audio) {
+        audio.src = '';
+      }
       audio = new Audio();
       audio.addEventListener('canplaythrough', () => {
         audio.play()
