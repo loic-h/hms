@@ -1,7 +1,8 @@
 {
   "rewrites": [
     { "source": "/pusher/auth", "destination": "api/pusher-auth" },
-    { "source": "/play", "destination": "/play.html" },
+    { "source": "/play/:id", "destination": "/play.html" },
+    { "source": "/manage/:match*", "destination": "/manage.html" },
     { "source": "/", "destination": "/manage.html" }
   ]
 }
