@@ -3,9 +3,8 @@
     <div class="home__logo cursored">
       <logo type="big" />
     </div>
-    <tracklist
-      v-if="tracks.length > 0"
-      :controls="true" />
+    <playlist-preview
+      v-if="tracks.length > 0"/>
     <search v-else />
   </page>
 </template>
@@ -15,6 +14,7 @@ import Page from '../../shared/components/page';
 import Logo from '../../shared/components/logo';
 import Search from '../components/search';
 import Tracklist from '../components/tracklist';
+import PlaylistPreview from '../components/playlist-preview';
 
 export default {
   name: 'Home',
@@ -22,7 +22,7 @@ export default {
     Page,
     Logo,
     Search,
-    Tracklist
+    PlaylistPreview
   },
   computed: {
     tracks() {
