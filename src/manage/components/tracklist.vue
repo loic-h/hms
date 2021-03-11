@@ -8,7 +8,7 @@
       :artist="item.artist"
       :preview="item.preview"
       :controls="controls"
-      :selected="trackId === item.id || (selectPlaying && isPlaying(item.preview))"
+      :selected="trackId === item.id || (selectPlaying && isPlaying(item.id))"
       @click="onItemClick(item)" />
   </div>
 </template>
@@ -43,9 +43,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.tracklist {
-  max-width: 30rem;
-}
-</style>

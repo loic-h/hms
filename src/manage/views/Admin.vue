@@ -18,7 +18,24 @@
       <div @click="copy" class="material-icons admin__copy">content_copy</div>
     </div>
 
-    <main class="admin__main">
+    <ul class="admin__mobile-menu">
+      <li
+        v-for="(icon, index) in ['queue_music', 'speaker', 'group']"
+        :key="index"
+        :class="{ 'is-selected': currentSection === index + 1 }">
+        <button
+          @click="currentSection = index + 1"
+          class="material-icons">
+          {{ icon }}
+        </button>
+      </li>
+    </ul>
+
+    <main
+      class="admin__main"
+      :class="`admin__main--${currentSection}`"
+      v-swipe="onMainSwipe">
+
       <div class="admin__tracks">
         <h3 class="admin__section-headline h3">
           <div class="material-icons">queue_music</div>
@@ -65,6 +82,11 @@ export default {
     InputText,
     Player
   },
+  data() {
+    return {
+      currentSection: 2
+    }
+  },
   computed: {
     ...mapState({
       playlistName: state => state.playlists.name
@@ -87,7 +109,16 @@ export default {
       copy(this.gameUrl);
     },
     onItemClick(id) {
+      this.currentSection = 2;
       this.$router.push(`/manage/${this.gameId}/${id}`);
+    },
+    onMainSwipe(e) {
+      if (e.direction === 2 && this.currentSection < 3) {
+        this.currentSection = this.currentSection + 1;
+      }
+      if (e.direction === 4 && this.currentSection > 1) {
+        this.currentSection = this.currentSection - 1;
+      }
     }
   }
 }
@@ -95,6 +126,9 @@ export default {
 
 <style lang="scss">
 .admin {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 
   &__header {
     display: flex;
@@ -141,8 +175,29 @@ export default {
     cursor: pointer;
   }
 
+  &__mobile-menu {
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 1px 0 var(--grey-light);
+    margin-bottom: 1rem;
+
+    li {
+      padding: 0.5rem;
+      color: var(--grey-light);
+
+      &.is-selected {
+        color: var(--black);
+      }
+    }
+
+    @include media(min-width, l) {
+      display: none;
+    }
+  }
+
   &__main {
     display: flex;
+    flex-grow: 1;
 
     > div {
 
@@ -150,20 +205,34 @@ export default {
         margin-right: 1.5rem;
       }
     }
+
+    @include media(max-width, l) {
+      > div {
+        display: none;
+      }
+
+      @for $i from 1 through 3 {
+        &--#{$i} {
+          > div:nth-child(#{$i}) {
+            display: block;
+          }
+        }
+      }
+    }
   }
 
-  &__tracks {
-    width: 20rem;
-    max-width: 20%;
+  &__tracks,
+  &__players {
+    width: 100%;
+
+    @include media(min-width, l) {
+      width: 20rem;
+      max-width: 20%;
+    }
   }
 
   &__track {
     flex-grow: 1;
-  }
-
-  &__players {
-    width: 20rem;
-    max-width: 20%;
   }
 
   &__section-headline {
