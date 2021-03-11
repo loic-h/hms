@@ -1,7 +1,7 @@
 <template>
   <div class="clients">
-    <clients-item
-      v-for="item in clients"
+    <users-item
+      v-for="item in gameUsers"
       :key="item.id"
       :id="item.id"
       :name="item.name" />
@@ -9,16 +9,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import ClientsItem from "./clients-item";
+import { mapGetters } from 'vuex';
+import UsersItem from "./users-item";
 
 export default {
   name: 'Users',
   components: {
-    ClientsItem
+    UsersItem
   },
   computed: {
-    ...mapState(['clients'])
+    ...mapGetters(['gameUsers'])
   }
 };
 </script>

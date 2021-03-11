@@ -1,9 +1,10 @@
 import Vuex from "vuex";
 import { listen, push, subscribe } from '../../services/pusher';
-import { v4 as uuid } from 'uuid';
+import { nanoid } from 'nanoid';
 import VuexPersistence from 'vuex-persist'
 
 const vuexLocal = new VuexPersistence({
+  key: 'hms-play',
   storage: window.localStorage,
   reducer: state => ({
     id: state.id,
@@ -22,12 +23,10 @@ export default new Vuex.Store({
   mutations: {
     name: (state, payload) => {
       state.name = payload;
-      localStorage.setItem('playerName', state.name);
     },
 
     id: (state, payload) => {
       state.id = payload;
-      localStorage.setItem('playerId', state.id);
     },
 
     ready: (state, payload) => {
@@ -41,6 +40,9 @@ export default new Vuex.Store({
 
   actions: {
     ready: ({ state, commit, dispatch }, { name }) => {
+      if (!state.id) {
+        commit('id', nanoid(6 ));
+      }
       commit('ready', true);
       commit('name', name);
       subscribe(state.gameId)
@@ -55,7 +57,8 @@ export default new Vuex.Store({
     join: ({ state }) => {
       push(`join-${state.gameId}`, {
         id: state.id,
-        name: state.name
+        name: state.name,
+        gameId: state.gameId
       });
     }
   },

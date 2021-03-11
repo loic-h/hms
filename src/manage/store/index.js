@@ -6,13 +6,15 @@ import { nanoid } from 'nanoid';
 import VuexPersistence from 'vuex-persist';
 
 const vuexLocal = new VuexPersistence({
+  key: 'hms-manage',
   storage: window.localStorage,
   reducer: state => ({
-    games: state.games
+    games: state.games,
+    users: state.users
   })
 });
 
-export default new Vuex.Store({
+const manageStore = {
   state: {
     spotify: {
       connected: false,
@@ -35,13 +37,22 @@ export default new Vuex.Store({
     games: {
       id: null,
       items: [
-        /* {
+      /* {
         id: String,
-        playlistId: String,
-        users: []
+        playlistId: String
       } */
       ]
-    }
+    },
+    users: [
+      /* {
+        id: String,
+        name: String,
+        gameIds: [],
+        scores: {
+          gameId: 0
+        },
+      } */
+    ]
   },
 
   mutations: {
@@ -66,8 +77,31 @@ export default new Vuex.Store({
       };
     },
 
-    game: (state, payload) => {
+    currentGame: (state, payload) => {
       state.games.id = payload;
+    },
+
+    game: (state, payload) => {
+      const index = state.games.items.findIndex(a => a.id === payload.id);
+      if (index < 0) {
+        state.games = {
+          ...state.games,
+          items: [
+            ...state.games.items,
+            payload
+          ]
+        };
+      } else {
+        const items = state.games.items;
+        items[index] = {
+          ...items[index],
+          ...payload
+        };
+        state.games = {
+          ...state.games,
+          items
+        };
+      }
     },
 
     newGame: (state, payload) => {
@@ -83,30 +117,43 @@ export default new Vuex.Store({
       ]
     },
 
-    client: (state, payload) => {
+    user: (state, payload) => {
+      console.log('commit user', payload)
       if (!payload.id) {
         return;
       }
-      let items = [...state.clients];
-      const itemIndex = items.findIndex(a => a.id === payload.id);
-      if (itemIndex >= 0) {
-        items[itemIndex] = {
-          ...state.clients[itemIndex],
+
+      const index = state.users.findIndex(a => a.id === payload.id);
+      if (index < 0) {
+        state.users = [
+          ...state.users,
+          {
+            id: payload.id,
+            name: payload.name,
+            gameIds: [payload.gameId],
+            scores: {}
+          }
+        ];
+      } else {
+        const users = [...state.users];
+        const gameIds = users[index].gameIds || [];
+        if (!gameIds.includes(payload.gameId)) {
+          gameIds.push(payload.gameId);
+          payload.gameIds = gameIds;
+        }
+        delete payload.gameId;
+        users[index] = {
+          ...users[index],
           ...payload
         };
-      } else {
-        items = [
-          ...state.clients,
-          payload
-        ];
+        state.users = [ ...users ];
       }
-      state.clients = [...items];
     }
   },
 
   getters: {
     gameId: (state) => {
-      return state.playlists.id
+      return state.games.id;
     },
 
     firstAvailableTrackId: (state, getters) => {
@@ -138,6 +185,19 @@ export default new Vuex.Store({
 
     gameById: (state) => id => {
       return state.games.items.find(a => a.id === id);
+    },
+
+    userById: (state) => id => {
+      return state.users.find(a => a.id === id);
+    },
+
+    gameUsers: (state, getters) => {
+      console.log(state.users)
+      return state.users.filter(a => a.gameIds && a.gameIds.includes(getters.gameId))
+        .map(a => ({
+          ...a,
+          score: a.scores[getters.gameId]
+        }));
     }
   },
 
@@ -172,7 +232,6 @@ export default new Vuex.Store({
     },
 
     playlist: async ({ commit }, { id }) => {
-      const gameId =
       commit('playlists', { id });
       commit('tracks', { loading: true });
       let body;
@@ -193,8 +252,9 @@ export default new Vuex.Store({
         id = await dispatch('newGame', playlistId);
       }
       const game = getters.gameById(id);
-      commit('game', game.id);
+      commit('currentGame', game.id);
       await dispatch('playlist', { id: game.playlistId });
+      return game;
     },
 
     newGame: ({ commit }, playlistId) => {
@@ -208,10 +268,20 @@ export default new Vuex.Store({
         .then(() => {
           // Reconnect clients
           push(`room-${getters.gameId}`, {});
-          listen(`join-${getters.gameId}`, ({ name, id }) => {
-            commit('client', { name, id });
+          listen(`join-${getters.gameId}`, ({ name, id, gameId }) => {
+            commit('user', { name, id, gameId });
           });
         });
+    },
+
+    modifyScore: ({ commit, getters }, { value, userId, gameId }) => {
+      const user = getters.userById(userId);
+      const scores = { ...user.scores };
+      scores[gameId] = value;
+      commit('user', {
+        id: userId,
+        scores
+      });
     },
 
     play: ({ getters, dispatch }, payload) => {
@@ -232,7 +302,11 @@ export default new Vuex.Store({
     resetTracks: ({ commit }) => {
       commit('tracks', { items: [] });
     }
-  },
+  }
+};
+
+export default new Vuex.Store({
+  ...manageStore,
 
   modules: {
     audio: audioStore
