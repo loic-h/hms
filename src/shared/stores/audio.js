@@ -24,7 +24,7 @@ export default {
     },
 
     track: (state, getters, rootState, rootGetters) => {
-      return rootGetters.trackById(state.id)
+      return rootGetters['tracks/itemById'](state.id)
     },
 
     src: (state, getters) => {

@@ -31,10 +31,10 @@ export default {
   },
   methods: {
     play() {
-      this.$store.dispatch('play', this.id);
+      this.$store.dispatch('games/play', this.id);
     },
     pause() {
-      this.$store.dispatch('pause');
+      this.$store.dispatch('games/pause');
     }
   }
 };

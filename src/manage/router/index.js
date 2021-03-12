@@ -16,7 +16,7 @@ const routes = [
     name: 'Create',
     beforeEnter: async (to) => {
       const { playlistId } = to.params;
-      const game = await store.dispatch('game', { playlistId });
+      const game = await store.dispatch('games/fetch', { playlistId });
       return { path: `/manage/${game.id}` };
     }
   },
@@ -27,7 +27,7 @@ const routes = [
     component: Admin,
     beforeEnter: async (to, from) => {
       const { id } = to.params;
-      await store.dispatch('game', { id });
+      await store.dispatch('games/fetch', { id });
       return true;
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="users">
     <users-item
-      v-for="item in gameUsers"
+      v-for="item in users"
       :key="item.id"
       :id="item.id"
       :name="item.name"
@@ -19,7 +19,7 @@ export default {
     UsersItem
   },
   computed: {
-    ...mapGetters(['gameUsers'])
+    ...mapGetters('games', ['users'])
   }
 };
 </script>

@@ -8,7 +8,7 @@
       </a>
       <div class="admin__title">
         <h1 class="h1">
-          {{ playlistName }}
+          {{ game.name }}
         </h1>
       </div>
     </header>
@@ -99,9 +99,11 @@ export default {
   },
   computed: {
     ...mapState({
-      playlistName: state => state.playlists.name,
+      playlist: state => state.playlists.name,
     }),
-    ...mapGetters(['gameById']),
+    ...mapGetters('games', {
+      gameById: 'itemById'
+    }),
     gameId() {
       return this.$route.params.id;
     },
@@ -113,7 +115,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('room', this.$route.params.id);
+    this.$store.dispatch('games/room', this.$route.params.id);
   },
   beforeUnmount() {
     unsubscribe(this.gameId);
@@ -137,7 +139,7 @@ export default {
     remove() {
       const confirm = window.confirm(`Do you want to delete the game "${this.game.name || this.game.id}"?`);
       if (confirm) {
-        this.$store.dispatch('deleteGame', this.game.id);
+        this.$store.dispatch('games/remove', this.game.id);
         window.location.href = '/';
       }
     }

@@ -1,24 +1,24 @@
 <template>
-  <div class="track-section" v-if="selectedTrack">
+  <div class="track-section" v-if="selectedItem">
     <div class="track-section__position">
       <span class="material-icons track-section__position-icon">speaker</span>
       <div>
         <span class="track-section__number h1">
-          {{ trackPosition(selectedTrack.id) }}
+          {{ itemPosition(selectedItem.id) }}
         </span>
         <span class="track-section__total">
-          {{ totalAvailableTracks }}
+          {{ totalAvailableItems }}
         </span>
       </div>
     </div>
     <play-button
       class="track-section__controls"
-      :playing="isPlaying(selectedTrack.id)"
+      :playing="isPlaying(selectedItem.id)"
       @play="play"
       @pause="pause" />
     <div class="track-section__infos">
-      <h2 class="track-section__name h1">{{ selectedTrack.name }}</h2>
-      <div class="track-section__artist">{{ selectedTrack.artist }}</div>
+      <h2 class="track-section__name h1">{{ selectedItem.name }}</h2>
+      <div class="track-section__artist">{{ selectedItem.artist }}</div>
     </div>
   </div>
 </template>
@@ -33,15 +33,15 @@ export default {
     PlayButton
   },
   computed: {
-    ...mapGetters(['selectedTrack', 'totalAvailableTracks', 'trackPosition']),
+    ...mapGetters('tracks', ['selectedItem', 'totalAvailableItems', 'itemPosition']),
     ...mapGetters('audio', ['isPlaying'])
   },
   methods: {
     play() {
-      this.$store.dispatch('play', this.selectedTrack.id);
+      this.$store.dispatch('games/play', this.selectedItem.id);
     },
     pause() {
-      this.$store.dispatch('pause');
+      this.$store.dispatch('games/pause');
     }
   }
 }

@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     onBackClick() {
-      this.$store.dispatch('resetTracks');
+      this.$store.dispatch('tracks/reset');
     },
     play(id) {
       this.$store.dispatch('audio/play', id);

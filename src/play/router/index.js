@@ -10,7 +10,7 @@ const routes = [
     component: Client,
     beforeEnter: (to) => {
       const gameId = to.params.id;
-      store.commit('gameId', gameId);
+      store.commit('games/id', gameId);
     }
   },
   {

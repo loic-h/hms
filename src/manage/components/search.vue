@@ -53,17 +53,17 @@ export default {
         return;
       }
       if (value === '') {
-        this.$store.dispatch('resetSearch');
+        this.$store.dispatch('playlists/search');
       }
       else {
-        this.$store.dispatch('search', value);
+        this.$store.dispatch('playlists/search', value);
       }
     }, 500),
     selectPlaylist(item) {
-      this.$store.dispatch('playlist', item);
+      this.$store.dispatch('tracks/fetch', item);
     },
     onCtaClick() {
-      this.$store.dispatch('search', this.dataQuery);
+      this.$store.dispatch('playlists/search', this.dataQuery);
     }
   }
 };

@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     createFromPlaylist() {
-      this.$store.dispatch('playlist', { id: this.searchValue });
+      this.$store.dispatch('tracks/fetch', { id: this.searchValue });
     }
   }
 };

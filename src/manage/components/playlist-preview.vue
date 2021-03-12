@@ -37,6 +37,7 @@ export default {
       playlistId: state => state.playlists.id
     }),
     playlist() {
+      console.log(this.playlistId)
       return this.$store.state.playlists.items.find(a => a.id === this.playlistId);
     }
   },
@@ -45,7 +46,7 @@ export default {
   },
   methods: {
     back() {
-      this.$store.dispatch('resetTracks');
+      this.$store.dispatch('tracks/reset');
     }
   }
 }
