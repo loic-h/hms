@@ -20,9 +20,6 @@ export default {
   },
   computed: {
     ...mapGetters(['gameUsers'])
-  },
-  mounted() {
-    console.log(this.gameUsers)
   }
 };
 </script>

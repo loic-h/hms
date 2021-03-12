@@ -8,7 +8,6 @@ import directives from '../directives';
 const app = createApp(App);
 
 for (let [key, value] of Object.entries(directives)) {
-  console.log(key)
   app.directive(key, value)
 }
 

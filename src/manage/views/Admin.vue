@@ -1,9 +1,11 @@
 <template>
   <div class="admin container">
     <header class="admin__header">
-      <logo
-        class="admin__logo"
-        type="small" />
+      <a href="/">
+        <logo
+          class="admin__logo"
+          type="small" />
+      </a>
       <div class="admin__title">
         <h1 class="h1">
           {{ playlistName }}
@@ -136,6 +138,11 @@ export default {
     padding-top: 1rem;
     width: 100%;
     margin-bottom: 1rem;
+
+    a {
+      display: block;
+      text-decoration: none;
+    }
 
     &__logo {
       flex-basis: 25%;

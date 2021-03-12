@@ -47,7 +47,6 @@ export default {
         commit('playing', false);
         commit('id', null);
       });
-      console.log(payload, state.id)
       audio.src = getters.src;
     },
 

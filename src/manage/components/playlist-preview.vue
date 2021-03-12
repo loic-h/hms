@@ -1,5 +1,5 @@
 <template>
-  <div class="playlist-preview" v-if="playlistId">
+  <div class="playlist-preview" v-if="playlist">
     <div class="playlist-preview__header">
       <button
         @click="back"

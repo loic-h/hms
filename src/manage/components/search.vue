@@ -4,6 +4,12 @@
       placeholder="Search for a playlist on spotify"
       :value="query"
       @update="onPlaylistInput" />
+    <cta
+      class="search__cta"
+      v-if="!query"
+      @click="onCtaClick">
+      Search
+    </cta>
     <ul v-if="items.length > 0">
       <li
         v-for="item in items"
@@ -20,11 +26,18 @@
 import { mapState } from 'vuex';
 import InputText from '../../shared/components/input-text';
 import debounce from '../../utils/debounce';
+import Cta from '../../shared/components/cta';
 
 export default {
   name: 'Search',
   components: {
-    InputText
+    InputText,
+    Cta
+  },
+  data() {
+    return {
+      dataQuery: null
+    };
   },
   computed: {
     ...mapState({
@@ -34,10 +47,23 @@ export default {
   },
   methods: {
     onPlaylistInput: debounce(function (value) {
-      this.$store.dispatch("search", value);
+      this.dataQuery = value;
+      this.$emit('input', value);
+      if (!this.query) {
+        return;
+      }
+      if (value === '') {
+        this.$store.dispatch('resetSearch');
+      }
+      else {
+        this.$store.dispatch('search', value);
+      }
     }, 500),
     selectPlaylist(item) {
-      this.$store.dispatch("playlist", item);
+      this.$store.dispatch('playlist', item);
+    },
+    onCtaClick() {
+      this.$store.dispatch('search', this.dataQuery);
     }
   }
 };
@@ -49,6 +75,11 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  &__cta {
+    margin-top: 1rem;
+    cursor: pointer;
+  }
 
   ul {
     padding-top: 2rem;

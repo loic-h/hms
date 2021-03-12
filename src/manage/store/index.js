@@ -234,7 +234,11 @@ const manageStore = {
         });
     },
 
-    playlist: async ({ commit }, { id }) => {
+    resetSearch: ({ commit }) => {
+      commit('playlists', { items: [], query: null });
+    },
+
+    playlist: async ({ state, commit }, { id }) => {
       commit('playlists', { id });
       commit('tracks', { loading: true });
       let body;
@@ -242,8 +246,12 @@ const manageStore = {
         body = await api.playlist({ id })
         const items = body.items.map(a => ({ ...a, artist: a.artists.join(', ') }));
         commit('playlists', { name: body.name });
+        if (!state.playlists.items.find(a => a.id = id )) {
+          commit('playlists', { items: [ { id, name: body.name } ] });
+        }
         commit('tracks', { items });
       } catch(err) {
+        console.error(err)
         commit('tracks', { error: err });
       }
       commit('tracks', { loading: false });

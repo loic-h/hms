@@ -1,9 +1,9 @@
 <template>
-  <router-link
+  <component :is="component"
     class="cta"
     :to="href">
     <slot />
-  </router-link>
+  </component>
 </template>
 
 <script>
@@ -11,6 +11,14 @@ export default {
   name: "Cta",
   props: {
     href: { type: String, default: null }
+  },
+  computed: {
+    component() {
+      if (this.href) {
+        return 'router-link';
+      }
+      return 'button';
+    }
   }
 }
 </script>

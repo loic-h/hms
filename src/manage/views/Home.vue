@@ -5,11 +5,25 @@
     </div>
     <playlist-preview
       v-if="tracks.length > 0"/>
-    <search v-else />
+    <template v-else>
+      <search @input="value => searchValue = value" />
+      <template v-if="!query">
+        <div>
+          <button
+            class="home__create"
+            v-if="searchValue && searchValue !== ''"
+            @click="createFromPlaylist">
+            Create from playlist ID
+          </button>
+        </div>
+      </template>
+    </template>
+
   </page>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Page from '../../shared/components/page';
 import Logo from '../../shared/components/logo';
 import Search from '../components/search';
@@ -23,9 +37,20 @@ export default {
     Search,
     PlaylistPreview
   },
+  data() {
+    return {
+      searchValue: null
+    };
+  },
   computed: {
-    tracks() {
-      return this.$store.state.tracks.items
+    ...mapState({
+      tracks: state => state.tracks.items,
+      query: state => state.playlists.query
+    })
+  },
+  methods: {
+    createFromPlaylist() {
+      this.$store.dispatch('playlist', { id: this.searchValue });
     }
   }
 };
@@ -37,6 +62,12 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  &__create {
+    margin-top: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 
   &__logo {
     margin-bottom: 3rem;
