@@ -3,10 +3,14 @@
     <div class="home__logo cursored">
       <logo type="big" />
     </div>
+
     <playlist-preview
       v-if="tracks.length > 0"/>
+
     <template v-else>
+
       <search @input="value => searchValue = value" />
+
       <template v-if="!query">
         <div>
           <button
@@ -17,6 +21,9 @@
           </button>
         </div>
       </template>
+
+      <games class="home__games" />
+
     </template>
 
   </page>
@@ -27,6 +34,7 @@ import { mapState } from 'vuex';
 import Page from '../../shared/components/page';
 import Logo from '../../shared/components/logo';
 import Search from '../components/search';
+import Games from '../components/games';
 import PlaylistPreview from '../components/playlist-preview';
 
 export default {
@@ -35,7 +43,8 @@ export default {
     Page,
     Logo,
     Search,
-    PlaylistPreview
+    PlaylistPreview,
+    Games
   },
   data() {
     return {
@@ -45,7 +54,8 @@ export default {
   computed: {
     ...mapState({
       tracks: state => state.tracks.items,
-      query: state => state.playlists.query
+      query: state => state.playlists.query,
+      games: state => state.games.items
     })
   },
   methods: {
@@ -71,6 +81,10 @@ export default {
 
   &__logo {
     margin-bottom: 3rem;
+  }
+
+  &__games {
+    margin-top: 2rem;
   }
 }
 </style>

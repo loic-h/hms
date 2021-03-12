@@ -39,7 +39,8 @@ const manageStore = {
       items: [
       /* {
         id: String,
-        playlistId: String
+        playlistId: String,
+        name: String
       } */
       ]
     },
@@ -77,8 +78,11 @@ const manageStore = {
       };
     },
 
-    currentGame: (state, payload) => {
-      state.games.id = payload;
+    games: (state, payload) => {
+      state.games = {
+        ...state.games,
+        ...payload
+      };
     },
 
     game: (state, payload) => {
@@ -194,6 +198,10 @@ const manageStore = {
       return state.users.find(a => a.id === id);
     },
 
+    playlistById: (state) => id => {
+      return state.playlists.items.find(a => a.id === id);
+    },
+
     gameUsers: (state, getters) => {
       return state.users.filter(a => a.gameIds && a.gameIds.includes(getters.gameId))
         .map(a => ({
@@ -238,7 +246,7 @@ const manageStore = {
       commit('playlists', { items: [], query: null });
     },
 
-    playlist: async ({ state, commit }, { id }) => {
+    playlist: async ({ state, commit, getters }, { id }) => {
       commit('playlists', { id });
       commit('tracks', { loading: true });
       let body;
@@ -246,7 +254,7 @@ const manageStore = {
         body = await api.playlist({ id })
         const items = body.items.map(a => ({ ...a, artist: a.artists.join(', ') }));
         commit('playlists', { name: body.name });
-        if (!state.playlists.items.find(a => a.id = id )) {
+        if (!getters.playlistById(id)) {
           commit('playlists', { items: [ { id, name: body.name } ] });
         }
         commit('tracks', { items });
@@ -263,15 +271,23 @@ const manageStore = {
         id = await dispatch('newGame', playlistId);
       }
       const game = getters.gameById(id);
-      commit('currentGame', game.id);
+      commit('games', { id: game.id });
       await dispatch('playlist', { id: game.playlistId });
       return game;
     },
 
-    newGame: ({ commit }, playlistId) => {
+    newGame: ({ commit, getters }, playlistId) => {
+      const playlist = getters.playlistById(playlistId);
       const id = nanoid(6);
-      commit('newGame', { id, playlistId });
+      commit('newGame', { id, playlistId, name: playlist.name });
       return id;
+    },
+
+    deleteGame: ({ state , commit }, payload) => {
+      const items = [...state.games.items];
+      const index = items.findIndex(a => a.id === payload);
+      items.splice(index, 1);
+      commit('games', { items, id: null });
     },
 
     room: async ({ getters, commit }) => {

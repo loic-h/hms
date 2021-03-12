@@ -59,12 +59,20 @@
         <users class="admin__users" />
       </div>
     </main>
+
+    <footer class="admin__footer">
+      <button
+        class="admin__remove material-icons"
+        @click="remove">
+        delete_forever
+      </button>
+    </footer>
   </div>
   <player />
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Tracklist from '../components/tracklist';
 import TrackSection from '../components/track-section';
 import Users from '../components/users';
@@ -91,20 +99,24 @@ export default {
   },
   computed: {
     ...mapState({
-      playlistName: state => state.playlists.name
+      playlistName: state => state.playlists.name,
     }),
+    ...mapGetters(['gameById']),
     gameId() {
       return this.$route.params.id;
     },
     gameUrl() {
       return new URL(`/play/${this.gameId}`, window.location.origin).toString();
+    },
+    game() {
+      return this.gameById(this.gameId);
     }
   },
   mounted() {
     this.$store.dispatch('room', this.$route.params.id);
   },
   beforeUnmount() {
-    unsubscribe(this.$store.getters.gameId);
+    unsubscribe(this.gameId);
   },
   methods: {
     copy() {
@@ -120,6 +132,13 @@ export default {
       }
       if (e.direction === 4 && this.currentSection > 1) {
         this.currentSection = this.currentSection - 1;
+      }
+    },
+    remove() {
+      const confirm = window.confirm(`Do you want to delete the game "${this.game.name || this.game.id}"?`);
+      if (confirm) {
+        this.$store.dispatch('deleteGame', this.game.id);
+        window.location.href = '/';
       }
     }
   }
@@ -250,6 +269,12 @@ export default {
     > div {
       margin-right: 0.25rem;
     }
+  }
+
+  &__footer {
+    display: flex;
+    padding: 1rem 0;
+    justify-content: flex-end;
   }
 
   @include media(max-width, m) {
