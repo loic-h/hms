@@ -17,7 +17,7 @@ const routes = [
     beforeEnter: async (to) => {
       const { playlistId } = to.params;
       const game = await store.dispatch('games/fetch', { playlistId });
-      return { path: `/manage/${game.id}` };
+      return { path: game.manageUrl };
     }
   },
 

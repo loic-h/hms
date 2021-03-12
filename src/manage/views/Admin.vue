@@ -15,7 +15,7 @@
 
     <div class="admin__share">
       <div class="admin__link" ref="link">
-        {{ gameUrl }}
+        {{ game.playUrl }}
       </div>
       <div @click="copy" class="material-icons admin__copy">content_copy</div>
     </div>
@@ -102,31 +102,22 @@ export default {
       playlist: state => state.playlists.name,
     }),
     ...mapGetters('games', {
-      gameById: 'itemById'
-    }),
-    gameId() {
-      return this.$route.params.id;
-    },
-    gameUrl() {
-      return new URL(`/play/${this.gameId}`, window.location.origin).toString();
-    },
-    game() {
-      return this.gameById(this.gameId);
-    }
+      'game': 'currentItem'
+    })
   },
   mounted() {
-    this.$store.dispatch('games/room', this.$route.params.id);
+    this.$store.dispatch('games/room', this.game.id);
   },
   beforeUnmount() {
     unsubscribe(this.gameId);
   },
   methods: {
     copy() {
-      copy(this.gameUrl);
+      copy(this.game.playUrl);
     },
     onItemClick(id) {
       this.currentSection = 2;
-      this.$router.push(`/manage/${this.gameId}/${id}`);
+      this.$router.push(`${this.game.manageUrl}/${id}`);
     },
     onMainSwipe(e) {
       if (e.direction === 2 && this.currentSection < 3) {

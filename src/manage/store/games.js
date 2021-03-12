@@ -35,7 +35,7 @@ export default {
       const items = [...state.items];
       const index = items.findIndex(a => a.id === payload);
       items.splice(index, 1);
-      state.items = [...state.items];
+      state.items = [...items];
     }
 
     // games: (state, payload) => {
@@ -87,6 +87,10 @@ export default {
       return state.items.find(a => a.id === id);
     },
 
+    currentItem: (state, getters) => {
+      return getters.itemById(state.id);
+    },
+
     users: (state, getters, rootState) => {
       return rootState.users.filter(a => a.gameIds && a.gameIds.includes(state.id))
         .map(a => ({
@@ -111,8 +115,13 @@ export default {
     create: ({ commit, rootGetters }, playlistId) => {
       const playlist = rootGetters['playlists/itemById'](playlistId);
       const id = nanoid(6);
-      console.log(playlist)
-      commit('addItem', { id, playlistId, name: playlist.name });
+      commit('addItem', {
+        id,
+        playlistId,
+        name: playlist.name,
+        manageUrl: `/manage/${id}`,
+        playUrl: new URL(`/play/${id}`, window.location.origin).toString()
+      });
       return id;
     },
 
