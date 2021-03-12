@@ -40,8 +40,21 @@ export default {
   },
 
   getters: {
-    itemById: (state) => id => {
-      return state.items.find(a => a.id === id);
+    decoratedItems: (state) => {
+      return [...state.items].map(a => {
+        const playUrl = new URL(`/play/${a.id}`, window.location.origin);
+        // playUrl.searchParams.append('pid', a.playlistId);
+        return {
+          ...a,
+          playUrl: playUrl.toString(),
+          manageUrl: `/manage/${a.id}`
+        };
+      })
+    },
+
+    itemById: (state, getters) => id => {
+      console.log(getters.decoratedItems)
+      return getters.decoratedItems.find(a => a.id === id);
     },
 
     currentItem: (state, getters) => {
@@ -75,9 +88,7 @@ export default {
       commit('addItem', {
         id,
         playlistId,
-        name: playlist.name,
-        manageUrl: `/manage/${id}`,
-        playUrl: new URL(`/play/${id}`, window.location.origin).toString()
+        name: playlist.name
       });
       return id;
     },

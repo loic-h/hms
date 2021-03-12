@@ -6,7 +6,7 @@
       class="material-icons">
       album
     </span>
-    <h3>{{ $options.title }}</h3>
+    <h3 v-if="!hideTitle">{{ $options.title }}</h3>
   </div>
 </template>
 
@@ -17,7 +17,8 @@ export default {
   name: 'Logo',
   title: globals.title,
   props: {
-    type: { type: String, default: 'small' }
+    type: { type: String, default: 'small' },
+    hideTitle: { type: Boolean, default: false }
   }
 };
 </script>

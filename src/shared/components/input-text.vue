@@ -29,7 +29,7 @@ export default {
   border-radius: var(--border-radius);
   border: solid 1px var(--grey-light);
   padding: 1rem;
-  max-width: 18rem;
+  // max-width: 18rem;
   width: 100%;
   box-sizing: border-box;
 

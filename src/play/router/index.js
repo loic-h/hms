@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Client from '../views/Client.vue';
+import Home from '../views/Home.vue';
 import NotFound from '../../shared/views/NotFound.vue';
 import store from '../store';
 
 const routes = [
   {
     path: '/play/:id',
-    name: 'Client',
-    component: Client,
+    name: 'Home',
+    component: Home,
     beforeEnter: (to) => {
       const gameId = to.params.id;
-      store.commit('gameId', gameId);
+      store.dispatch('game', gameId);
     }
   },
   {

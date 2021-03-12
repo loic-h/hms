@@ -36,12 +36,15 @@ module.exports = {
     config
       .plugin('html-play')
       .tap(args => {
-        args[0].env = {
-          node: process.env.NODE_ENV,
-          pusher: {
-            key: process.env.PUSHER_KEY,
-            cluster: process.env.PUSHER_CLUSTER
-          }
+        args[0].globals = {
+          env: {
+            node: process.env.NODE_ENV,
+            pusher: {
+              key: process.env.PUSHER_KEY,
+              cluster: process.env.PUSHER_CLUSTER
+            }
+          },
+          title
         };
         return args;
       })

@@ -28,7 +28,7 @@ export default {
   border-radius: var(--border-radius);
   border: solid 1px var(--black);
   padding: 1rem;
-  max-width: 18rem;
+  // max-width: 18rem;
   width: 100%;
   background-color: var(--black);
   color: var(--white);

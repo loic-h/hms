@@ -15,16 +15,14 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   state: {
     id: null,
-    name: "",
     ready: false,
-    gameId: null
+    gameId: null,
+    gameTitle: null,
+    trackUrl: null,
+    trackOrder: null
   },
 
   mutations: {
-    name: (state, payload) => {
-      state.name = payload;
-    },
-
     id: (state, payload) => {
       state.id = payload;
     },
@@ -39,12 +37,15 @@ export default new Vuex.Store({
   },
 
   actions: {
+    game: ({ commit }, payload) => {
+      commit('gameId', payload);
+    },
+
     ready: ({ state, commit, dispatch }, { name }) => {
       if (!state.id) {
         commit('id', nanoid(6 ));
       }
       commit('ready', true);
-      commit('name', name);
       subscribe(state.gameId)
       .then(() => {
         dispatch('join');
@@ -54,6 +55,7 @@ export default new Vuex.Store({
         dispatch('join')
       });
     },
+
     join: ({ state }) => {
       push(`join-${state.gameId}`, {
         id: state.id,

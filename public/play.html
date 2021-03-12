@@ -11,9 +11,7 @@
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script>
-      window.globals = {
-        env: JSON.parse('<%= JSON.stringify(htmlWebpackPlugin.options.env) %>')
-      };
+      window.globals = JSON.parse('<%= JSON.stringify(htmlWebpackPlugin.options.globals) %>');
     </script>
   </head>
   <body>
