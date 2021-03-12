@@ -37,49 +37,6 @@ export default {
       items.splice(index, 1);
       state.items = [...items];
     }
-
-    // games: (state, payload) => {
-    //   state.games = {
-    //     ...state.games,
-    //     ...payload
-    //   };
-    // },
-
-    // game: (state, payload) => {
-    //   const index = state.games.items.findIndex(a => a.id === payload.id);
-    //   if (index < 0) {
-    //     state.games = {
-    //       ...state.games,
-    //       items: [
-    //         ...state.games.items,
-    //         payload
-    //       ]
-    //     };
-    //   } else {
-    //     const items = state.games.items;
-    //     items[index] = {
-    //       ...items[index],
-    //       ...payload
-    //     };
-    //     state.games = {
-    //       ...state.games,
-    //       items
-    //     };
-    //   }
-    // },
-
-    // newGame: (state, payload) => {
-    //   if (state.games.items.find(a => a.id === payload.id)) {
-    //     return;
-    //   }
-    //   state.games.items = [
-    //     ...state.games.items,
-    //     {
-    //       ...payload,
-    //       users: []
-    //     }
-    //   ]
-    // },
   },
 
   getters: {
@@ -92,7 +49,7 @@ export default {
     },
 
     users: (state, getters, rootState) => {
-      return rootState.users.filter(a => a.gameIds && a.gameIds.includes(state.id))
+      return rootState.users.items.filter(a => a.gameIds && a.gameIds.includes(state.id))
         .map(a => ({
           ...a,
           score: a.scores[state.id] || 0
@@ -136,7 +93,7 @@ export default {
           // Reconnect clients
           push(`room-${state.id}`, {});
           listen(`join-${state.id}`, ({ name, id, gameId }) => {
-            commit('user', { name, id, gameId }, { root: true });
+            commit('users/item', { name, id, gameId }, { root: true });
           });
         });
     },

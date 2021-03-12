@@ -52,7 +52,7 @@ export default {
     },
 
     removeItem: (state, payload) => {
-      state.users = [...state.users.filter(a => a.id !== payload)];
+      state.items = [...state.items.filter(a => a.id !== payload)];
     }
   },
 

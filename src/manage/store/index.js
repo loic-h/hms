@@ -1,8 +1,5 @@
 import Vuex from 'vuex';
-import api from '../../api';
-
 import audio from '../../shared/stores/audio';
-import spotify from './spotify';
 import playlists from './playlists';
 import tracks from './tracks';
 import games from './games';
@@ -22,7 +19,6 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   modules: {
     audio,
-    // spotify,
     playlists,
     tracks,
     games,

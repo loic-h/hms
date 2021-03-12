@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     remove() {
-      this.$store.commit('users/remove', this.id);
+      this.$store.commit('users/removeItem', this.id);
     }
   }
 }
