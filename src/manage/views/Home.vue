@@ -9,20 +9,9 @@
 
     <template v-else>
 
-      <search @input="value => searchValue = value" />
+      <search />
 
-      <template v-if="!query">
-        <div>
-          <button
-            class="home__create"
-            v-if="searchValue && searchValue !== ''"
-            @click="createFromPlaylist">
-            Create from playlist ID
-          </button>
-        </div>
-      </template>
-
-      <games class="home__games" />
+      <games v-if="!query" class="home__games" />
 
     </template>
 
@@ -57,11 +46,6 @@ export default {
       query: state => state.playlists.query,
       games: state => state.games.items
     })
-  },
-  methods: {
-    createFromPlaylist() {
-      this.$store.dispatch('tracks/fetch', { id: this.searchValue });
-    }
   }
 };
 </script>

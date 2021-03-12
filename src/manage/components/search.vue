@@ -4,12 +4,12 @@
       placeholder="Search for a playlist on spotify"
       :value="query"
       @update="onPlaylistInput" />
-    <cta
-      class="search__cta"
-      v-if="!query"
-      @click="onCtaClick">
-      Search
-    </cta>
+    <button
+      class="home__create"
+      v-if="query"
+      @click="createFromPlaylist">
+      playlist ID
+    </button>
     <ul v-if="items.length > 0">
       <li
         v-for="item in items"
@@ -26,18 +26,11 @@
 import { mapState } from 'vuex';
 import InputText from '../../shared/components/input-text';
 import debounce from '../../utils/debounce';
-import Cta from '../../shared/components/cta';
 
 export default {
   name: 'Search',
   components: {
-    InputText,
-    Cta
-  },
-  data() {
-    return {
-      dataQuery: null
-    };
+    InputText
   },
   computed: {
     ...mapState({
@@ -47,11 +40,7 @@ export default {
   },
   methods: {
     onPlaylistInput: debounce(function (value) {
-      this.dataQuery = value;
       this.$emit('input', value);
-      if (!this.query) {
-        return;
-      }
       if (value === '') {
         this.$store.dispatch('playlists/search');
       }
@@ -62,8 +51,8 @@ export default {
     selectPlaylist(item) {
       this.$store.dispatch('tracks/fetch', item);
     },
-    onCtaClick() {
-      this.$store.dispatch('playlists/search', this.dataQuery);
+    createFromPlaylist() {
+      this.$store.dispatch('tracks/fetch', { id: this.query });
     }
   }
 };

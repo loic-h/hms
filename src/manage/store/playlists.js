@@ -45,17 +45,24 @@ export default {
 
   actions: {
     search: ({ commit }, payload) => {
+      if (payload === '') {
+        payload = null;
+      }
       commit('query', payload);
-      commit('loading', true);
-      api.search({ query: payload, type: 'playlist' })
-        .then(body => {
-          commit('items', body.items);
-        })
-        .catch(err => {
-          commit('error', err);
-        }).finally(() => {
-          commit('loading', false);
-        });
+      if (payload) {
+        commit('loading', true);
+        api.search({ query: payload, type: 'playlist' })
+          .then(body => {
+            commit('items', body.items);
+          })
+          .catch(err => {
+            commit('error', err);
+          }).finally(() => {
+            commit('loading', false);
+          });
+      } else {
+        commit('items', []);
+      }
     },
 
     resetSearch: ({ commit }) => {

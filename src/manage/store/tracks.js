@@ -68,7 +68,6 @@ export default {
         commit('items', items);
       } catch(err) {
         console.error(err)
-        commit('items', items);
         commit('error', err);
       }
       commit('loading', false);
