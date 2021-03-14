@@ -8,6 +8,7 @@ export default {
     src: null,
     currentTime: null,
     duration: null,
+    volume: null,
     playing: false
   },
 
@@ -26,6 +27,11 @@ export default {
 
     currentTime: (state, payload) => {
       state.currentTime = payload;
+    },
+
+    volume: (state, payload) => {
+      state.volume = payload;
+      state.audio.volume = payload;
     },
 
     duration: (state, payload) => {
@@ -53,6 +59,7 @@ export default {
       }
       commit('src', payload)
       await commit('audio', new Audio());
+      commit('volume', 0.2);
       commit('playing', true);
       state.audio.addEventListener('loadedmetadata', () => {
         commit('duration', state.audio.duration);
@@ -82,7 +89,9 @@ export default {
     },
 
     pause: ({ state, commit }) => {
-      state.audio.pause();
+      if (state.audio) {
+        state.audio.pause();
+      }
       commit('playing', false);
     },
 

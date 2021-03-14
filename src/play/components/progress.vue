@@ -1,8 +1,8 @@
 <template>
   <svg
     class="progress"
-    :height="radius * 2"
-    :width="radius * 2"
+    :height="size"
+    :width="size"
   >
     <circle
       class="progress__background"
@@ -10,8 +10,8 @@
       fill="transparent"
       :stroke-width="stroke"
       :r="normalizedRadius"
-      :cx="radius"
-      :cy="radius"
+      :cx="origin"
+      :cy="origin"
     />
     <circle
       class="progress__progress"
@@ -21,8 +21,8 @@
       :style="{ strokeDashoffset }"
       :stroke-width="stroke"
       :r="normalizedRadius"
-      :cx="radius"
-      :cy="radius"
+      :cx="origin"
+      :cy="origin"
     />
   </svg>
 </template>
@@ -43,6 +43,12 @@ export default {
     },
     circumference() {
       return this.normalizedRadius * 2 * Math.PI
+    },
+    size() {
+      return this.radius + (this.stroke * 2);
+    },
+    origin() {
+      return this.size * 0.5;
     }
   }
 }
@@ -52,7 +58,7 @@ export default {
 .progress {
 
   &__progress {
-    transition: stroke-dashoffset 0.35s;
+    transition: stroke-dashoffset 0.1s;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
     color: var(--black);

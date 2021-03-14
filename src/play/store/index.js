@@ -34,6 +34,10 @@ export default new Vuex.Store({
 
     gameId: (state, payload) => {
       state.gameId = payload;
+    },
+
+    gameTitle: (state, payload) => {
+      state.gameTitle = payload;
     }
   },
 
@@ -48,12 +52,20 @@ export default new Vuex.Store({
       }
       commit('ready', true);
       subscribe(state.gameId)
-      .then(() => {
-        dispatch('join');
-      });
+        .then(() => {
+          dispatch('join');
+        });
       // Join on server reload
-      listen(`room-${state.gameId}`, () => {
-        dispatch('join')
+      listen(`room-${state.gameId}`, ({ title }) => {
+        dispatch('join');
+        dispatch('audio/pause', null, { root: true });
+      });
+
+      listen(`status-${state.gameId}`, ({ title, src, currentTime }) => {
+        if (src) {
+          dispatch('audio/play', { src, currentTime }, { root: true });
+        }
+        commit('gameTitle', title);
       });
     },
 

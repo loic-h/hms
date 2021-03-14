@@ -1,11 +1,15 @@
 <template>
-  <progress-component :radius="120" :progress="progress" :stroke="24" />
-  <template v-if="playing">
-    Playing
-  </template>
-  <template v-else>
-    Waiting
-  </template>
+  <div class="player">
+    <progress-component :radius="120" :progress="progress" :stroke="24" />
+    <div class="player__status">
+      <template v-if="playing">
+        Playing
+      </template>
+      <template v-else>
+        Waiting
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -38,3 +42,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.player {
+  position: relative;
+
+  &__status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+</style>
