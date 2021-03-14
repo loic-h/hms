@@ -97,13 +97,19 @@ export default {
       commit('id', null);
     },
 
-    room: async ({ state, commit }) => {
+    room: async ({ state, commit, rootState }) => {
       subscribe(state.id)
         .then(() => {
           // Reconnect clients
           push(`room-${state.id}`, {});
           listen(`join-${state.id}`, ({ name, id, gameId }) => {
             commit('users/item', { name, id, gameId }, { root: true });
+            if (rootState.audio.playing) {
+              push('play', {
+                src: rootState.audio.src,
+                currentTime: rootState.audio.currentTime
+              });
+            }
           });
         });
     }

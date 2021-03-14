@@ -1,5 +1,5 @@
 <template>
-  <progress-component :radius="120" :progress="10" :stroke="24" />
+  <progress-component :radius="120" :progress="progress" :stroke="24" />
   <template v-if="playing">
     Playing
   </template>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { listen } from '../../services/pusher';
 import ProgressComponent from './progress';
 
@@ -22,17 +22,17 @@ export default {
     this.initAudio();
   },
   computed: {
-    ...mapState('audio', ['playing'])
+    ...mapState('audio', ['playing']),
+    ...mapGetters('audio', ['progress'])
   },
   methods: {
     initAudio() {
-      listen("play", ({ url }) => {
-        console.log('play', url)
-        this.$store.dispatch('audio/play', url);
+      listen("play", (payload) => {
+        this.$store.dispatch('audio/play', payload);
       });
 
       listen("pause", () => {
-        this.$store.dispatch('audio/play');
+        this.$store.dispatch('audio/pause');
       });
     }
   }

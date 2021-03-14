@@ -59,9 +59,6 @@ export default {
   }
 
   &__background {
-    transition: stroke-dashoffset 0.35s;
-    // transform: rotate(-90deg);
-    transform-origin: 50% 50%;
     color: var(--grey-pale);
   }
 }

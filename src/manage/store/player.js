@@ -32,20 +32,19 @@ export default {
   },
 
   actions: {
-    play: ({ getters, commit, dispatch }, payload) => {
+    play: async ({ getters, commit, dispatch, rootState }, payload) => {
       commit('id', payload);
-      const preview = getters.track.preview;
-      dispatch('audio/play', preview, { root: true });
+      const src = getters.track.preview;
+      await dispatch('audio/play', { src }, { root: true });
       push('play', {
-        url: preview
+        src: rootState.audio.src,
+        currentTime: rootState.audio.currentTime
       });
     },
 
-    pause: ({ dispatch }, payload) => {
+    pause: ({ dispatch }) => {
       dispatch('audio/pause', null, { root: true });
-      push('pause', {
-        url: payload
-      });
+      push('pause', {});
     },
   }
 };

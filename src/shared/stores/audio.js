@@ -1,20 +1,35 @@
+let raf;
+
 export default {
   namespaced: true,
 
   state: {
+    audio: null,
     src: null,
-    progress: null,
-    playing: false,
-    audio: null
+    currentTime: null,
+    duration: null,
+    playing: false
   },
 
   mutations: {
+    audio: (state, payload) => {
+      state.audio = payload;
+    },
+
     src: (state, payload) => {
       state.src = payload;
     },
 
     playing: (state, payload) => {
       state.playing = payload;
+    },
+
+    currentTime: (state, payload) => {
+      state.currentTime = payload;
+    },
+
+    duration: (state, payload) => {
+      state.duration = payload;
     }
   },
 
@@ -23,35 +38,46 @@ export default {
       return state.src === src && state.playing === true;
     },
 
-    currentTime: (state) => {
-      return state.audio.currentTime;
+    progress: (state) => {
+      if (!state.duration) {
+        return 0;
+      }
+      return state.currentTime * 100 / state.duration;
     }
   },
 
   actions: {
-    src: ({ state, getters, commit, dispatch }, payload) => {
+    src: async ({ state, getters, commit, dispatch }, payload) => {
       if (state.audio) {
         dispatch('stop');
       }
       commit('src', payload)
-      state.audio = new Audio();
+      await commit('audio', new Audio());
       commit('playing', true);
+      state.audio.addEventListener('loadedmetadata', () => {
+        commit('duration', state.audio.duration);
+      });
       state.audio.addEventListener('canplaythrough', () => {
         state.audio.play();
       });
       state.audio.addEventListener('ended', () => {
         commit('playing', false);
         commit('src', null);
+        commit('currentTime', state.duration);
       });
       state.audio.src = state.src;
     },
 
-    play: ({ state, getters, commit, dispatch }, payload) => {
-      if (state.src !== payload) {
-        dispatch('src', payload);
+    play: async ({ state, getters, commit, dispatch }, { src, currentTime } = {}) => {
+      if (state.src !== src) {
+        await dispatch('src', src);
       } else {
         state.audio.play();
       }
+      if (typeof currentTime !== 'undefined') {
+        state.audio.currentTime = currentTime;
+      }
+      requestAnimationFrame(() => dispatch('progress'));
       commit('playing', true);
     },
 
@@ -67,6 +93,14 @@ export default {
       }
       commit('src', null);
       commit('playing', false);
+      commit('currentTime', null);
+    },
+
+    progress: ({ state, commit, dispatch }) => {
+      if (state.playing) {
+        commit('currentTime', state.audio.currentTime);
+        requestAnimationFrame(() => dispatch('progress'))
+      }
     }
   }
-}
+};
