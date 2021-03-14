@@ -104,7 +104,10 @@ export default {
           push(`room-${state.id}`, {});
           listen(`join-${state.id}`, ({ name, id, gameId }) => {
             commit('users/item', { name, id, gameId }, { root: true });
-            let data = { title: rootGetters['playlists/name'] };
+            let data = {
+              title: rootGetters['playlists/name'],
+              totalTracks: rootGetters['tracks/totalAvailableItems']
+            };
             if (rootState.audio.playing) {
               data = {
                 ...data,

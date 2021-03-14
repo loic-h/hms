@@ -1,5 +1,3 @@
-let raf;
-
 export default {
   namespaced: true,
 

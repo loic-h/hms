@@ -20,7 +20,8 @@ export default new Vuex.Store({
     gameId: null,
     gameTitle: null,
     trackUrl: null,
-    trackOrder: null
+    trackPosition: '-',
+    totalTracks: null
   },
 
   mutations: {
@@ -38,6 +39,14 @@ export default new Vuex.Store({
 
     gameTitle: (state, payload) => {
       state.gameTitle = payload;
+    },
+
+    trackPosition: (state, payload) => {
+      state.trackPosition = payload;
+    },
+
+    totalTracks: (state, payload) => {
+      state.totalTracks = payload;
     }
   },
 
@@ -61,11 +70,12 @@ export default new Vuex.Store({
         dispatch('audio/pause', null, { root: true });
       });
 
-      listen(`status-${state.gameId}`, ({ title, src, currentTime }) => {
+      listen(`status-${state.gameId}`, ({ title, src, currentTime, totalTracks }) => {
         if (src) {
           dispatch('audio/play', { src, currentTime }, { root: true });
         }
         commit('gameTitle', title);
+        commit('totalTracks', totalTracks);
       });
     },
 

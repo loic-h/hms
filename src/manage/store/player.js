@@ -32,11 +32,12 @@ export default {
   },
 
   actions: {
-    play: async ({ getters, commit, dispatch, rootState }, payload) => {
-      commit('id', payload);
+    play: async ({ getters, commit, dispatch, rootState, rootGetters }, id) => {
+      commit('id', id);
       const src = getters.track.preview;
       await dispatch('audio/play', { src }, { root: true });
       push('play', {
+        position: rootGetters['tracks/itemPosition'](id),
         src: rootState.audio.src,
         currentTime: rootState.audio.currentTime
       });
