@@ -2,6 +2,7 @@ import Vuex from "vuex";
 import { listen, push, subscribe } from '../../services/pusher';
 import { nanoid } from 'nanoid';
 import VuexPersistence from 'vuex-persist'
+import audio from '../../shared/stores/audio';
 
 const vuexLocal = new VuexPersistence({
   key: 'hms-play',
@@ -63,6 +64,10 @@ export default new Vuex.Store({
         gameId: state.gameId
       });
     }
+  },
+
+  modules: {
+    audio
   },
 
   plugins: [vuexLocal.plugin]

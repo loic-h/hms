@@ -1,11 +1,11 @@
-let audio;
-
 export default {
   namespaced: true,
 
   state: {
     src: null,
-    playing: false
+    progress: null,
+    playing: false,
+    audio: null
   },
 
   mutations: {
@@ -22,44 +22,48 @@ export default {
     isPlaying: (state) => (src) => {
       return state.src === src && state.playing === true;
     },
+
+    currentTime: (state) => {
+      return state.audio.currentTime;
+    }
   },
 
   actions: {
     src: ({ state, getters, commit, dispatch }, payload) => {
-      if (audio) {
+      if (state.audio) {
         dispatch('stop');
       }
       commit('src', payload)
-      audio = new Audio();
+      state.audio = new Audio();
       commit('playing', true);
-      audio.addEventListener('canplaythrough', () => {
-        audio.play();
+      state.audio.addEventListener('canplaythrough', () => {
+        state.audio.play();
       });
-      audio.addEventListener('ended', () => {
+      state.audio.addEventListener('ended', () => {
         commit('playing', false);
         commit('src', null);
       });
-      audio.src = state.src;
+      state.audio.src = state.src;
     },
 
     play: ({ state, getters, commit, dispatch }, payload) => {
       if (state.src !== payload) {
         dispatch('src', payload);
       } else {
-        audio.play();
+        state.audio.play();
       }
       commit('playing', true);
     },
 
-    pause: ({ commit }) => {
-      audio.pause();
+    pause: ({ state, commit }) => {
+      state.audio.pause();
       commit('playing', false);
     },
 
-    stop: ({ commit }) => {
-      if (audio) {
-        audio.src = '';
-        audio = null;
+    stop: ({ state, commit }) => {
+      if (state.audio) {
+        state.audio.src = '';
+        state.audio = null;
       }
       commit('src', null);
       commit('playing', false);

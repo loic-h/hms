@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { listen } from '../../services/pusher';
 import ProgressComponent from './progress';
 
@@ -17,37 +18,22 @@ export default {
   components: {
     ProgressComponent
   },
-  data() {
-    return {
-      audio: new Audio(),
-      url: null,
-      playing: false
-    }
-  },
   mounted() {
     this.initAudio();
+  },
+  computed: {
+    ...mapState('audio', ['playing'])
   },
   methods: {
     initAudio() {
       listen("play", ({ url }) => {
-        this.audio.src = url;
-        this.play();
+        console.log('play', url)
+        this.$store.dispatch('audio/play', url);
       });
 
       listen("pause", () => {
-        this.pause();
+        this.$store.dispatch('audio/play');
       });
-    },
-    play() {
-      this.audio.play();
-      this.playing = true;
-    },
-    pause() {
-      this.audio.pause();
-      this.playing = false;
-    },
-    onReadyClick() {
-      this.ready = true
     }
   }
 }
