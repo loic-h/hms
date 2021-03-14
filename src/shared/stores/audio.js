@@ -4,13 +4,13 @@ export default {
   namespaced: true,
 
   state: {
-    id: null,
+    src: null,
     playing: false
   },
 
   mutations: {
-    id: (state, payload) => {
-      state.id = payload;
+    src: (state, payload) => {
+      state.src = payload;
     },
 
     playing: (state, payload) => {
@@ -19,25 +19,17 @@ export default {
   },
 
   getters: {
-    isPlaying: (state, getters) => (id) => {
-      return state.id === id && state.playing === true;
+    isPlaying: (state) => (src) => {
+      return state.src === src && state.playing === true;
     },
-
-    track: (state, getters, rootState, rootGetters) => {
-      return rootGetters['tracks/itemById'](state.id)
-    },
-
-    src: (state, getters) => {
-      return getters.track.preview;
-    }
   },
 
   actions: {
-    id: ({ state, getters, commit, dispatch }, payload) => {
+    src: ({ state, getters, commit, dispatch }, payload) => {
       if (audio) {
         dispatch('stop');
       }
-      commit('id', payload)
+      commit('src', payload)
       audio = new Audio();
       commit('playing', true);
       audio.addEventListener('canplaythrough', () => {
@@ -45,14 +37,14 @@ export default {
       });
       audio.addEventListener('ended', () => {
         commit('playing', false);
-        commit('id', null);
+        commit('src', null);
       });
-      audio.src = getters.src;
+      audio.src = state.src;
     },
 
     play: ({ state, getters, commit, dispatch }, payload) => {
-      if (state.id !== payload) {
-        dispatch('id', payload);
+      if (state.src !== payload) {
+        dispatch('src', payload);
       } else {
         audio.play();
       }
@@ -69,7 +61,7 @@ export default {
         audio.src = '';
         audio = null;
       }
-      commit('id', null);
+      commit('src', null);
       commit('playing', false);
     }
   }

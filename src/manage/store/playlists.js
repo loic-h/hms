@@ -38,8 +38,12 @@ export default {
       return state.items.find(a => a.id === id);
     },
 
+    current: (state, getters) => {
+      return getters.itemById(state.id)
+    },
+
     name: (state, getters) => {
-      return getters.itemById(state.id).name;
+      return getters.current.name;
     }
   },
 

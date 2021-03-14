@@ -53,7 +53,6 @@ export default {
     },
 
     itemById: (state, getters) => id => {
-      console.log(getters.decoratedItems)
       return getters.decoratedItems.find(a => a.id === id);
     },
 
@@ -107,21 +106,6 @@ export default {
             commit('users/item', { name, id, gameId }, { root: true });
           });
         });
-    },
-
-    play: ({ rootGetters, dispatch }, payload) => {
-      const { preview } = rootGetters['tracks/itemById'](payload)
-      dispatch('audio/play', payload, { root: true });
-      push('play', {
-        url: preview
-      });
-    },
-
-    pause: ({ dispatch }, payload) => {
-      dispatch('audio/pause', null, { root: true });
-      push('pause', {
-        url: payload
-      });
-    },
+    }
   }
 }

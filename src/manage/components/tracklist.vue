@@ -8,8 +8,11 @@
       :artist="item.artist"
       :preview="item.preview"
       :controls="controls"
-      :selected="trackId === item.id || (selectPlaying && isPlaying(item.id))"
-      @click="onItemClick(item)" />
+      :selected="trackId === item.id || (selectPlaying && playingItemId === item.id)"
+      :is-playing="item.id === playingItemId"
+      @click="onItemClick(item)"
+      @play="$emit('play', item)"
+      @pause="$emit('pause', item)" />
   </div>
 </template>
 
@@ -24,14 +27,14 @@ export default {
   },
   props: {
     controls: { type: Boolean, default: false },
+    playingItemId: { type: String, default: null },
     selectPlaying: { type: Boolean, default: false }
   },
   computed: {
     ...mapState({
       tracks: state => state.tracks.items,
       trackId: state => state.tracks.id
-    }),
-    ...mapGetters('audio', ['isPlaying'])
+    })
   },
   methods: {
     onItemClick(item) {

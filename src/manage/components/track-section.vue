@@ -34,14 +34,14 @@ export default {
   },
   computed: {
     ...mapGetters('tracks', ['selectedItem', 'totalAvailableItems', 'itemPosition']),
-    ...mapGetters('audio', ['isPlaying'])
+    ...mapGetters('player', ['isPlaying'])
   },
   methods: {
     play() {
-      this.$store.dispatch('games/play', this.selectedItem.id);
+      this.$store.dispatch('player/play', this.selectedItem.id);
     },
     pause() {
-      this.$store.dispatch('games/pause');
+      this.$store.dispatch('player/pause');
     }
   }
 }

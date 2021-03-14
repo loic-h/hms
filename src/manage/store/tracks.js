@@ -40,6 +40,10 @@ export default {
       return state.items.find(a => a.id === id);
     },
 
+    itemByPreview: (state) => preview => {
+      return state.items.find(a => a.preview === preview);
+    },
+
     selectedItem: (state, getters) => {
       return getters.itemById(state.id);
     },
@@ -55,6 +59,15 @@ export default {
     itemPosition: (state, getters) => id => {
       return getters.availableItems.findIndex(a => a.id === id) + 1;
     },
+
+    playingItemId(state, getters, rootState, rootGetters) {
+      const preview = rootState.audio.src;
+      if (!rootGetters['audio/isPlaying'](preview)) {
+        return;
+      }
+      const track = getters['itemByPreview'](preview);
+      return track.id;
+    }
   },
 
   actions: {

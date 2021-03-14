@@ -12,9 +12,12 @@
     </div>
     <tracklist
       :controls="true"
-      :selectPlaying="true" />
+      :selectPlaying="true"
+      :playing-item-id="playingItemId"
+      @play="onTrackPlay"
+      @pause="onTrackPause" />
     <div class="playlist-preview__footer">
-      <cta class="playlist-preview__cta" :href="`/create/${playlistId}`">
+      <cta class="playlist-preview__cta" :href="`/create/${playlist.id}`">
         Create
       </cta>
     </div>
@@ -22,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import Tracklist from './tracklist';
 import Cta from '../../shared/components/cta';
 
@@ -33,13 +36,10 @@ export default {
     Cta
   },
   computed: {
-    ...mapState({
-      playlistId: state => state.playlists.id
+    ...mapGetters('playlists', {
+      playlist: 'current'
     }),
-    playlist() {
-      console.log(this.playlistId)
-      return this.$store.state.playlists.items.find(a => a.id === this.playlistId);
-    }
+    ...mapGetters('tracks', ['playingItemId'])
   },
   beforeUnmount() {
     this.$store.dispatch('audio/stop');
@@ -47,6 +47,12 @@ export default {
   methods: {
     back() {
       this.$store.dispatch('tracks/reset');
+    },
+    onTrackPlay(item) {
+      this.$store.dispatch('audio/play', item.preview);
+    },
+    onTrackPause(item) {
+      this.$store.dispatch('audio/pause');
     }
   }
 }

@@ -6,13 +6,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 export default {
   name: 'PlayButton',
-  computed: {
-    ...mapGetters('audio', ['isPlaying'])
-  },
   props: {
     playing: { type: Boolean, default: false }
   }

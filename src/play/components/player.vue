@@ -1,4 +1,5 @@
 <template>
+  <progress-component :radius="120" :progress="10" :stroke="24" />
   <template v-if="playing">
     Playing
   </template>
@@ -9,9 +10,13 @@
 
 <script>
 import { listen } from '../../services/pusher';
+import ProgressComponent from './progress';
 
 export default {
   name: "Player",
+  components: {
+    ProgressComponent
+  },
   data() {
     return {
       audio: new Audio(),

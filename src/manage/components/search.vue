@@ -65,6 +65,10 @@ export default {
   align-items: center;
   width: 100%;
 
+  input {
+    max-width: 30rem;
+  }
+
   &__cta {
     margin-top: 1rem;
     cursor: pointer;

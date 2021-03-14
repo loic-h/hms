@@ -26,8 +26,8 @@ export default {
     PlayButton
   },
   computed: {
-    ...mapState('audio', ['id']),
-    ...mapGetters('audio', ['isPlaying', 'track']),
+    ...mapState('player', ['id']),
+    ...mapGetters('player', ['isPlaying', 'track']),
   },
   methods: {
     play() {

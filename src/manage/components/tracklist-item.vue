@@ -12,14 +12,13 @@
     <play-button
       v-if="controls && preview"
       class="tracklist-item__controls"
-      :playing="isPlaying(id)"
-      @play="play(id)"
-      @pause="pause" />
+      :playing="isPlaying"
+      @play="$emit('play')"
+      @pause="$emit('pause')" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import PlayButton from './play-button';
 
 export default {
@@ -33,21 +32,8 @@ export default {
     artist: { type: String, default: null },
     preview: { type: String, default: null },
     controls: { type: Boolean, default: false },
-    selected: { type: Boolean, default: false }
-  },
-  computed: {
-    ...mapGetters('audio', ['isPlaying'])
-  },
-  methods: {
-    onBackClick() {
-      this.$store.dispatch('tracks/reset');
-    },
-    play(id) {
-      this.$store.dispatch('audio/play', id);
-    },
-    pause() {
-      this.$store.dispatch('audio/pause');
-    }
+    selected: { type: Boolean, default: false },
+    isPlaying: { type: Boolean, default: false }
   }
 }
 </script>
