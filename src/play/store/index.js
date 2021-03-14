@@ -16,6 +16,7 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   state: {
     id: null,
+    name: name,
     ready: false,
     gameId: null,
     gameTitle: null,
@@ -27,6 +28,10 @@ export default new Vuex.Store({
   mutations: {
     id: (state, payload) => {
       state.id = payload;
+    },
+
+    name: (state, payload) => {
+      state.name = payload;
     },
 
     ready: (state, payload) => {
@@ -60,6 +65,7 @@ export default new Vuex.Store({
         commit('id', nanoid(6 ));
       }
       commit('ready', true);
+      commit('name', name);
       subscribe(state.gameId)
         .then(() => {
           dispatch('join');
