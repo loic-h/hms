@@ -73,8 +73,9 @@ export default {
     },
 
     usersByAnswers: (state, getters, rootState) => id => {
-      return state.items.map(user => {
-        console.log(state.answers)
+      return state.items
+        .filter(a => [...a.gameIds].includes(rootState.games.id))
+        .map(user => {
         const answer = state.answers.find(a => {
           return a.userId === user.id && a.trackId === id && a.gameId === rootState.games.id
         }) || { score: 0, items: [] };

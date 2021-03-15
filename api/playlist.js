@@ -31,6 +31,6 @@ module.exports = async (req, res) => {
     });
   } catch(err) {
     console.error(err);
-    res.sendStatus(404);
+    res.status(404);
   }
 };

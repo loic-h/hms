@@ -66,7 +66,7 @@ export default {
         return;
       }
       const track = getters.itemByPreview(preview);
-      return track.id;
+      return track && track.id;
     }
   },
 

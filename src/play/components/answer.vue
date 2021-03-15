@@ -40,7 +40,6 @@ export default {
       this.value = '';
     },
     removeAnswer(index) {
-      console.log(index)
       this.$store.dispatch('game/removeAnswer', index);
     }
   }

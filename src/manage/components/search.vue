@@ -1,6 +1,7 @@
 <template>
   <div class="search">
     <input-text
+      class="search__input"
       placeholder="Search for a playlist on spotify"
       :value="query"
       @update="onPlaylistInput" />
@@ -65,7 +66,7 @@ export default {
   align-items: center;
   width: 100%;
 
-  input {
+  &__input {
     max-width: 30rem;
   }
 

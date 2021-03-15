@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Games',
   computed: {
-    ...mapState({
-      games: state => state.games.items
+    ...mapGetters('games', {
+      games: 'decoratedItems'
     })
   }
 };

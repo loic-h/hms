@@ -34,7 +34,6 @@ export default {
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      console.log(e.target.elements)
       const name = e.target.elements.name.value;
       this.$store.dispatch('user/ready', { name });
     }

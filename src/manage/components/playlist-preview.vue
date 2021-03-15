@@ -49,7 +49,7 @@ export default {
       this.$store.dispatch('tracks/reset');
     },
     onTrackPlay(item) {
-      this.$store.dispatch('audio/play', item.preview);
+      this.$store.dispatch('audio/play', { src: item.preview });
     },
     onTrackPause(item) {
       this.$store.dispatch('audio/pause');

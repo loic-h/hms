@@ -63,10 +63,12 @@ export default {
     padding: 1rem;
     margin-bottom: 1rem;
     display: flex;
-    align-items: center;
+    align-items: stretch;
 
     > div:first-child {
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     h3 {
@@ -76,6 +78,7 @@ export default {
 
     ul {
       display: flex;
+      flex-grow: 1;
 
       li {
         border-radius: var(--border-radius);
