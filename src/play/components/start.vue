@@ -43,7 +43,8 @@ export default {
 
 <style lang="scss">
 .start {
-  width: 25rem;
+  max-width: 25rem;
+  width: 100%;
   padding-top: 3rem;
 
   &__input {
