@@ -63,6 +63,7 @@ export default {
   }
 
   span {
+    display: block;
     font-size: 1rem;
     white-space: nowrap;
     overflow: hidden;

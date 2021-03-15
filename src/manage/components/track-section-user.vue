@@ -4,12 +4,19 @@
       class="track-section-users__item"
       v-for="user in users"
       :key="user.id">
-      <h3>{{ user.name }}</h3>
-      <ul>
-        <li v-for="(item, index) in user.answers" :key="index">
-          {{ item }}
-        </li>
-      </ul>
+      <div>
+        <h3>{{ user.name }}</h3>
+        <ul>
+          <li v-for="(item, index) in user.answers" :key="index">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+      <div class="track-section-users__score">
+        <button @click="increaseScore(user)">+</button>
+        <span>{{ user.score }}</span>
+        <button @click="decreaseScore(user)">-</button>
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +32,23 @@ export default {
     users() {
       return this.usersByAnswers(this.selectedItem.id)
     }
+  },
+  methods: {
+    increaseScore(user) {
+      this.$store.dispatch('users/score', {
+        value: user.score + 1,
+        userId: user.id,
+      });
+    },
+    decreaseScore(user) {
+      if (user.score <= 0) {
+        return;
+      }
+      this.$store.dispatch('users/score', {
+        value: user.score - 1,
+        userId: user.id
+      });
+    },
   }
 }
 </script>
@@ -38,6 +62,12 @@ export default {
     background-color: var(--grey-pale);
     padding: 1rem;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+
+    > div:first-child {
+      flex-grow: 1;
+    }
 
     h3 {
       @include h2;
@@ -54,6 +84,20 @@ export default {
         margin-right: 1rem;
         border: 1px solid var(--grey-light);
       }
+    }
+  }
+
+  &__score {
+    display: flex;
+    flex-direction: column;
+
+    span {
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+
+    button {
+      cursor: pointer;
     }
   }
 }

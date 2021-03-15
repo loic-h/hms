@@ -6,10 +6,7 @@ export default {
       /* {
         id: String,
         name: String,
-        gameIds: [],
-        scores: {
-          gameId: 0
-        }
+        gameIds: []
       } */
     ],
     answers: [/*
@@ -17,6 +14,7 @@ export default {
         gameId,
         trackId,
         userId,
+        score,
         items: []
       }
     */]
@@ -75,28 +73,40 @@ export default {
     },
 
     usersByAnswers: (state, getters, rootState) => id => {
-      const answers = state.answers.filter(a => {
-        return a.trackId === id && a.gameId === rootState.games.id
-      });
-      return answers.map(a => {
-        const user = getters.itemById(a.userId);
+      return state.items.map(user => {
+        console.log(state.answers)
+        const answer = state.answers.find(a => {
+          return a.userId === user.id && a.trackId === id && a.gameId === rootState.games.id
+        }) || { score: 0, items: [] };
         return {
           ...user,
-          answers: a.items
+          answers: answer.items,
+          score: answer.score
         };
       })
+    },
+
+    score: (state, getters, rootState) => (userId) => {
+      const score = state.answers.reduce((a, v) => {
+        if (v.userId === userId && v.gameId === rootState.games.id) {
+          a += v.score;
+        }
+        return a;
+      }, 0);
+      return score
     }
   },
 
   actions: {
-    modifyScore: ({ commit, getters }, { value, userId, gameId }) => {
-      const user = getters.itemById(userId);
-      const scores = { ...user.scores };
-      scores[gameId] = value;
-      commit('item', {
-        id: userId,
-        scores
+    score: ({ state, commit, rootState }, { userId, value }) => {
+      const trackId = rootState.tracks.id;
+      const gameId = rootState.games.id;
+      let answers = [...state.answers];
+      let answersIndex = answers.findIndex(a => {
+        return a.gameId === gameId && a.trackId === trackId && a.userId === userId
       });
+      answers[answersIndex].score = value;
+      commit('answers', answers);
     },
 
     answers: ({ state, commit }, { userId, items, trackId, gameId }) => {
@@ -111,7 +121,8 @@ export default {
           gameId,
           trackId,
           userId,
-          items
+          items,
+          score: 0
         });
       }
       commit('answers', answers);

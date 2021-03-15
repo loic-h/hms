@@ -60,13 +60,13 @@ export default {
       return getters.itemById(state.id);
     },
 
-    users: (state, getters, rootState) => {
+    users: (state, getters, rootState, rootGetters) => {
       return rootState.users.items.filter(a => a.gameIds && a.gameIds.includes(state.id))
         .map(a => ({
           ...a,
-          score: a.scores[state.id] || 0
+          score: rootGetters['users/score'](a.id)
         }))
-        .sort((a, b) => b - a);
+        .sort((a, b) => b.score - a.score);
     }
   },
 
