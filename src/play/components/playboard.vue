@@ -1,13 +1,16 @@
 <template>
   <div class="playboard">
     <header-component class="playboard__header" />
-    <h1 class="playboard__title cursored">{{ gameTitle }}</h1>
+    <h1 class="playboard__title cursored">{{ title }}</h1>
     <div class="playboard__content">
       <div class="playboard__position">
-        <span>{{ trackPosition }}</span>
+        <span>{{ position }}</span>
         <span>{{ totalTracks }}</span>
       </div>
-      <player />
+      <player class="playboard__player" />
+      <div v-if="id">
+        <answer />
+      </div>
     </div>
   </div>
 </template>
@@ -16,15 +19,19 @@
 import { mapState } from 'vuex';
 import HeaderComponent from './header';
 import Player from './player';
+import Answer from './answer';
+
 
 export default {
   name: 'Playboard',
   components: {
     HeaderComponent,
-    Player
+    Player,
+    Answer
   },
   computed: {
-    ...mapState(['gameTitle', 'trackPosition', 'totalTracks'])
+    ...mapState('game', ['title', 'totalTracks']),
+    ...mapState('track', ['position', 'id'])
   }
 };
 </script>
@@ -70,8 +77,13 @@ export default {
     }
   }
 
+  &__player {
+    margin-bottom: 2rem;
+  }
+
   &__content {
     flex-grow: 1;
+    width: 25rem;
   }
 }
 </style>

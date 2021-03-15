@@ -9,9 +9,17 @@ export default {
         gameIds: [],
         scores: {
           gameId: 0
-        },
+        }
       } */
-    ]
+    ],
+    answers: [/*
+      {
+        gameId,
+        trackId,
+        userId,
+        items: []
+      }
+    */]
   },
 
   mutations: {
@@ -32,7 +40,8 @@ export default {
             id: payload.id,
             name: payload.name,
             gameIds: [payload.gameId],
-            scores: {}
+            scores: {},
+            answers: []
           }
         ];
       } else {
@@ -53,6 +62,10 @@ export default {
 
     removeItem: (state, payload) => {
       state.items = [...state.items.filter(a => a.id !== payload)];
+    },
+
+    answers: (state, payload) => {
+      state.answers = payload;
     }
   },
 
@@ -60,6 +73,19 @@ export default {
     itemById: (state) => id => {
       return state.items.find(a => a.id === id);
     },
+
+    usersByAnswers: (state, getters, rootState) => id => {
+      const answers = state.answers.filter(a => {
+        return a.trackId === id && a.gameId === rootState.games.id
+      });
+      return answers.map(a => {
+        const user = getters.itemById(a.userId);
+        return {
+          ...user,
+          answers: a.items
+        };
+      })
+    }
   },
 
   actions: {
@@ -72,5 +98,23 @@ export default {
         scores
       });
     },
+
+    answers: ({ state, commit }, { userId, items, trackId, gameId }) => {
+      let answers = [...state.answers];
+      let answersIndex = answers.findIndex(a => {
+        return a.gameId === gameId && a.trackId === trackId && a.userId === userId
+      });
+      if (answersIndex >= 0) {
+        answers[answersIndex].items = items;
+      } else {
+        answers.push({
+          gameId,
+          trackId,
+          userId,
+          items
+        });
+      }
+      commit('answers', answers);
+    }
   }
 }

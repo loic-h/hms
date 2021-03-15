@@ -1,10 +1,11 @@
 <template>
   <div class="home__logo cursored">
-      <logo type="big" />
+    <logo type="big" />
   </div>
 
   <form @submit="onSubmit" class="start">
     <input-text
+      class="start__input"
       name="name"
       :value="name"
       placeholder="Choose a name" />
@@ -28,13 +29,14 @@ export default {
     Cta
   },
   computed: {
-    ...mapState(['name'])
+    ...mapState('user', ['name'])
   },
   methods: {
     onSubmit(e) {
       e.preventDefault();
+      console.log(e.target.elements)
       const name = e.target.elements.name.value;
-      this.$store.dispatch('ready', { name });
+      this.$store.dispatch('user/ready', { name });
     }
   }
 };
@@ -42,9 +44,10 @@ export default {
 
 <style lang="scss">
 .start {
-padding-top: 3rem;
+  width: 25rem;
+  padding-top: 3rem;
 
-  input {
+  &__input {
     margin-bottom: 1rem;
   }
 }

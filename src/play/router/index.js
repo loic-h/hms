@@ -9,8 +9,7 @@ const routes = [
     name: 'Home',
     component: Home,
     beforeEnter: (to) => {
-      const gameId = to.params.id;
-      store.dispatch('game', gameId);
+      store.commit('game/id', to.params.id);
     }
   },
   {

@@ -65,7 +65,7 @@ export default {
       if (!rootGetters['audio/isPlaying'](preview)) {
         return;
       }
-      const track = getters['itemByPreview'](preview);
+      const track = getters.itemByPreview(preview);
       return track.id;
     }
   },

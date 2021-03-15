@@ -37,6 +37,7 @@ export default {
       const src = getters.track.preview;
       await dispatch('audio/play', { src }, { root: true });
       push('play', {
+        id,
         position: rootGetters['tracks/itemPosition'](id),
         src: rootState.audio.src,
         currentTime: rootState.audio.currentTime

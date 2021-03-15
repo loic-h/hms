@@ -20,17 +20,20 @@
       <h2 class="track-section__name h1">{{ selectedItem.name }}</h2>
       <div class="track-section__artist">{{ selectedItem.artist }}</div>
     </div>
+    <track-section-user />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import PlayButton from './play-button';
+import TrackSectionUser from './track-section-user';
 
 export default {
   name: 'TrackSection',
   components: {
-    PlayButton
+    PlayButton,
+    TrackSectionUser
   },
   computed: {
     ...mapGetters('tracks', ['selectedItem', 'totalAvailableItems', 'itemPosition']),

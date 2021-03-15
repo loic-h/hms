@@ -19,7 +19,7 @@ export default {
     Playboard
   },
   computed: {
-    ...mapState(['ready', 'name'])
+    ...mapState('user', ['ready', 'name'])
   }
 };
 </script>

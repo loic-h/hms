@@ -31,9 +31,11 @@ export default {
   },
   methods: {
     initAudio() {
-      listen('play', ({ src, currentTime, position }) => {
+      listen('play', ({ id, src, currentTime, position }) => {
         this.$store.dispatch('audio/play', { src, currentTime });
-        this.$store.commit('trackPosition', position)
+        this.$store.commit('track/id', id);
+        this.$store.commit('track/src', src);
+        this.$store.commit('track/position', position)
       });
 
       listen('pause', () => {

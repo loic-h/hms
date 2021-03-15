@@ -18,7 +18,7 @@ export default {
     Logo
   },
   computed: {
-    ...mapState(['name'])
+    ...mapState('user', ['name'])
   }
 }
 </script>

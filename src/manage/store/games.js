@@ -97,12 +97,12 @@ export default {
       commit('id', null);
     },
 
-    room: async ({ state, commit, rootState, rootGetters }) => {
+    room: async ({ state, commit, dispatch, rootState, rootGetters }) => {
       subscribe(state.id)
         .then(() => {
           // Reconnect clients
-          push(`room-${state.id}`, {});
-          listen(`join-${state.id}`, ({ name, id, gameId }) => {
+          push('room', {});
+          listen('join', ({ name, id, gameId }) => {
             commit('users/item', { name, id, gameId }, { root: true });
             let data = {
               title: rootGetters['playlists/name'],
@@ -115,7 +115,10 @@ export default {
                 currentTime: rootState.audio.currentTime
               };
             }
-            push(`status-${state.id}`, data);
+            push('status', data);
+          });
+          listen('answers', ({ userId, trackId, items }) => {
+            dispatch('users/answers', { userId, items, trackId, gameId: state.id }, { root: true });
           });
         });
     }
