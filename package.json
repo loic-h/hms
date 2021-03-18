@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "npm-run-all --parallel dev:*",
-    "dev:client": "vue-cli-service build --watch --mode development",
-    "dev:server": "NODE_ENV=development nodemon start",
+    "serve": "vercel dev",
     "build": "vue-cli-service build",
     "start": "node server"
   },
