@@ -1,4 +1,5 @@
 import api from '../../api';
+import { push } from '../../services/pusher';
 
 export default {
   namespaced: true,
@@ -105,6 +106,14 @@ export default {
 
     reset: ({ commit }) => {
       commit('items', []);
+    },
+
+    reveal: ({ state, getters }) => {
+      push('reveal', {
+        id: state.id,
+        name: getters.selectedItem.name,
+        artist: getters.selectedItem.artist
+      })
     }
   }
 }

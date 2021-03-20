@@ -54,11 +54,12 @@ export default {
     },
 
     next: ({ commit, getters, dispatch, rootGetters }) => {
+      const nextTrack = getters.nextTrack;
       if (!getters.nextTrack) {
         return;
       }
-      dispatch('play', getters.nextTrack.id);
-      commit('tracks/id', getters.nextTrack.id, { root: true });
+      commit('tracks/id', nextTrack.id, { root: true });
+      dispatch('play', nextTrack.id);
     }
   }
 };

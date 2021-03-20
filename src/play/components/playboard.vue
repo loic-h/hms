@@ -8,6 +8,15 @@
         <span>{{ totalTracks }}</span>
       </div>
       <player class="playboard__player" />
+
+      <div v-if="id" class="playboard__track-infos">
+        <span v-if="!name && !artist" class="playboard__question h1">?</span>
+        <template v-else>
+          <h2 class="playboard__name h1">{{ name }}</h2>
+          <span class="playboard__artist">{{ artist }}</span>
+        </template>
+      </div>
+
       <div v-if="id">
         <answer />
       </div>
@@ -20,7 +29,7 @@ import { mapState } from 'vuex';
 import HeaderComponent from './header';
 import Player from './player';
 import Answer from './answer';
-
+import { listen } from '../../services/pusher';
 
 export default {
   name: 'Playboard',
@@ -29,9 +38,29 @@ export default {
     Player,
     Answer
   },
+  data() {
+    return {
+      name: null,
+      artist: null
+    }
+  },
   computed: {
     ...mapState('game', ['title', 'totalTracks']),
     ...mapState('track', ['position', 'id'])
+  },
+  watch: {
+    id() {
+      this.name = null;
+      this.artist = null;
+    }
+  },
+  mounted() {
+    listen('reveal', ({ id, name, artist }) => {
+      if (id === this.id) {
+        this.name = name;
+        this.artist = artist;
+      }
+    })
   }
 };
 </script>
@@ -85,6 +114,17 @@ export default {
     flex-grow: 1;
     width: 25rem;
     max-width: 100%;
+  }
+
+  &__track-infos {
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--grey-pale);
+    padding: 1rem;
+  }
+
+  &__name {
+    margin-bottom: 0.5rem;
   }
 }
 </style>
