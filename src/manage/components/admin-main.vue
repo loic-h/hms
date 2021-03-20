@@ -145,6 +145,7 @@ export default {
       display: none;
       padding-left: var(--container-padding-s);
       padding-right: var(--container-padding-s);
+      padding-top: 1rem;
     }
 
     @for $i from 1 through 3 {
@@ -160,7 +161,6 @@ export default {
     > div {
       padding-left: var(--container-padding-xs);
       padding-right: var(--container-padding-xs);
-      padding-top: 1rem;
     }
 
     &__section-headline {

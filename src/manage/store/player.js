@@ -28,6 +28,10 @@ export default {
       }
       const track = rootGetters['tracks/itemById'](id);
       return rootGetters['audio/isPlaying'](track.preview);
+    },
+
+    nextTrack: (state, getters, rootState, rootGetters) => {
+      return rootGetters['tracks/nextItemById'](state.id);
     }
   },
 
@@ -48,5 +52,13 @@ export default {
       dispatch('audio/pause', null, { root: true });
       push('pause', {});
     },
+
+    next: ({ commit, getters, dispatch, rootGetters }) => {
+      if (!getters.nextTrack) {
+        return;
+      }
+      dispatch('play', getters.nextTrack.id);
+      commit('tracks/id', getters.nextTrack.id, { root: true });
+    }
   }
 };

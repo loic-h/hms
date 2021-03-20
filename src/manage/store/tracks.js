@@ -40,8 +40,20 @@ export default {
       return state.items.find(a => a.id === id);
     },
 
+    itemIndexById: (state, getters) => id => {
+      return getters.availableItems.findIndex(a => a.id === id);
+    },
+
     itemByPreview: (state) => preview => {
       return state.items.find(a => a.preview === preview);
+    },
+
+    nextItemById: (state, getters) => id => {
+      const index = getters.itemIndexById(id);
+      if (index >= getters.totalAvailableItems) {
+        return;
+      }
+      return getters.availableItems[index + 1];
     },
 
     selectedItem: (state, getters) => {
@@ -56,8 +68,12 @@ export default {
       return getters.availableItems.length;
     },
 
+    itemIndex: (state, getters) => {
+      return getters.itemIndexById(state.id);
+    },
+
     itemPosition: (state, getters) => id => {
-      return getters.availableItems.findIndex(a => a.id === id) + 1;
+      return getters.itemIndex + 1;
     },
 
     playingItemId(state, getters, rootState, rootGetters) {

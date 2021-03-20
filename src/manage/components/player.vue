@@ -6,10 +6,16 @@
         :playing="isPlaying(id)"
         @play="play(id)"
         @pause="pause" />
-      <router-link :to="url" class="player__infos">
-        <div class="player__name">{{ name }}</div>
-        <div class="player__artist">{{ artist }}</div>
-      </router-link>
+      <div class="player__infos">
+        <router-link :to="url">
+          <div class="player__name">{{ name }}</div>
+          <div class="player__artist">{{ artist }}</div>
+        </router-link>
+      </div>
+      <button
+        v-if="nextTrack"
+        @click="$store.dispatch('player/next')"
+        class="material-icons">skip_next</button>
     </div>
   </div>
 </template>
@@ -30,7 +36,7 @@ export default {
         return state.player.id || state.tracks.id
       }
     }),
-    ...mapGetters('player', ['isPlaying']),
+    ...mapGetters('player', ['isPlaying', 'nextTrack']),
     ...mapGetters('tracks', {
       trackById: 'itemById'
     }),
@@ -83,6 +89,10 @@ export default {
       display: block;
       color: var(--white);
     }
+  }
+
+  &__infos {
+    flex-grow: 1;
   }
 
   &__name {
