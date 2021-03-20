@@ -23,7 +23,7 @@ export default {
     },
 
     isPlaying: (state, getters, rootState, rootGetters) => id => {
-      if (id !== state.id) {
+      if (!id || id !== state.id) {
         return;
       }
       const track = rootGetters['tracks/itemById'](id);

@@ -61,6 +61,7 @@ export default {
     border-radius: var(--border-radius);
     background-color: var(--grey-pale);
     padding: 1rem;
+    padding-bottom: 0;
     margin-bottom: 1rem;
     display: flex;
     align-items: stretch;
@@ -79,12 +80,14 @@ export default {
     ul {
       display: flex;
       flex-grow: 1;
+      flex-wrap: wrap;
 
       li {
         border-radius: var(--border-radius);
         background-color: var(--white);
         padding: 1rem;
         margin-right: 1rem;
+        margin-bottom: 1rem;
         border: 1px solid var(--grey-light);
       }
     }
@@ -93,6 +96,8 @@ export default {
   &__score {
     display: flex;
     flex-direction: column;
+    margin-bottom: 1rem;
+    justify-content: center;
 
     span {
       font-weight: 600;

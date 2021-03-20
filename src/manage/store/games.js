@@ -67,6 +67,10 @@ export default {
           score: rootGetters['users/score'](a.id)
         }))
         .sort((a, b) => b.score - a.score);
+    },
+
+    trackUrl: (state, getters) => id => {
+      return `${getters.currentItem.manageUrl}/${id}`;
     }
   },
 
@@ -77,6 +81,9 @@ export default {
       }
       commit('id', id);
       const game = getters.itemById(id);
+      if (!game) {
+        return;
+      }
       await dispatch('tracks/fetch', { id: game.playlistId }, {root: true });
       return game;
     },

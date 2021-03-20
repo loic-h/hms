@@ -67,14 +67,12 @@ export default {
     ...mapState({
       playlist: state => state.playlists.name,
     }),
-    ...mapGetters('games', {
-      'game': 'currentItem'
-    })
+    ...mapGetters('games', ['trackUrl'])
   },
   methods: {
     onItemClick(id) {
       this.currentSection = 2;
-      this.$router.push(`${this.game.manageUrl}/${id}`);
+      this.$router.push(this.trackUrl(id));
     },
     onMainSwipe(e) {
       if (e.direction === 2 && this.currentSection < 3) {
@@ -92,7 +90,6 @@ export default {
 .admin-mobile-menu {
   display: flex;
   box-shadow: 0 1px 0 var(--grey-light);
-  margin-bottom: 1rem;
 
   li {
     flex-grow: 1;
@@ -146,8 +143,8 @@ export default {
   @include media(max-width, l) {
     > div {
       display: none;
-      padding-left: var(--container-padding-xs);
-      padding-right: var(--container-padding-xs);
+      padding-left: var(--container-padding-s);
+      padding-right: var(--container-padding-s);
     }
 
     @for $i from 1 through 3 {
@@ -161,8 +158,13 @@ export default {
 
   @include media(max-width, s) {
     > div {
-      padding-left: var(--container-padding-s);
-      padding-right: var(--container-padding-s);
+      padding-left: var(--container-padding-xs);
+      padding-right: var(--container-padding-xs);
+      padding-top: 1rem;
+    }
+
+    &__section-headline {
+      display: none;
     }
   }
 

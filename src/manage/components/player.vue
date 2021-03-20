@@ -1,17 +1,15 @@
 <template>
-  <div
-    v-if="id"
-    class="player">
+  <div class="player">
     <div class="player__container container">
       <play-button
         class="player__controls"
         :playing="isPlaying(id)"
         @play="play(id)"
         @pause="pause" />
-      <div class="player__infos">
-        <div class="player__name h2">{{ track.name }}</div>
-        <div class="player__artist">{{ track.artist }}</div>
-      </div>
+      <router-link :to="url" class="player__infos">
+        <div class="player__name">{{ name }}</div>
+        <div class="player__artist">{{ artist }}</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -27,14 +25,35 @@ export default {
   },
   computed: {
     ...mapState('player', ['id']),
-    ...mapGetters('player', ['isPlaying', 'track']),
+    ...mapState({
+      trackId: state => {
+        return state.player.id || state.tracks.id
+      }
+    }),
+    ...mapGetters('player', ['isPlaying']),
+    ...mapGetters('tracks', {
+      trackById: 'itemById'
+    }),
+    ...mapGetters('games', ['trackUrl']),
+    name() {
+      return this.track ? this.track.name : '-';
+    },
+    artist() {
+      return this.track ? this.track.artist : '-';
+    },
+    track() {
+      return this.trackById(this.trackId)
+    },
+    url() {
+      return this.trackUrl(this.trackId);
+    }
   },
   methods: {
     play() {
-      this.$store.dispatch('games/play', this.id);
+      this.$store.dispatch('player/play', this.trackId);
     },
     pause() {
-      this.$store.dispatch('games/pause');
+      this.$store.dispatch('player/pause');
     }
   }
 };
@@ -49,6 +68,7 @@ export default {
   background-color: var(--black);
   color: var(--white);
   box-sizing: border-box;
+  font-size: 0.8rem;
 
   &__container {
     display: flex;
@@ -65,5 +85,12 @@ export default {
     }
   }
 
+  &__name {
+    font-weight: 900;
+  }
+
+  a {
+    text-decoration: none;
+  }
 }
 </style>

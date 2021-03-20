@@ -27,7 +27,15 @@ const routes = [
     component: Admin,
     beforeEnter: async (to, from) => {
       const { id } = to.params;
-      await store.dispatch('games/fetch', { id });
+      let game;
+      try {
+        game = await store.dispatch('games/fetch', { id });
+      } catch(e) {
+        console.log(e)
+      }
+      if (!game) {
+        return { name: 'Home' };
+      }
       return true;
     },
   },
