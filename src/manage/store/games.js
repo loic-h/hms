@@ -1,5 +1,5 @@
 import { subscribe, listen, push } from '../../services/pusher';
-import { nanoid } from 'nanoid';
+import uid from '../../utils/uid';
 
 export default {
   namespaced: true,
@@ -90,7 +90,7 @@ export default {
 
     create: ({ commit, rootGetters }, playlistId) => {
       const playlist = rootGetters['playlists/itemById'](playlistId);
-      const id = nanoid(6);
+      const id = uid();
       commit('addItem', {
         id,
         playlistId,

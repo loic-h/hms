@@ -84,6 +84,7 @@ export default {
   &__content {
     flex-grow: 1;
     width: 25rem;
+    max-width: 100%;
   }
 }
 </style>

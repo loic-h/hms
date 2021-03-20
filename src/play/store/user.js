@@ -1,5 +1,5 @@
 import { listen, push, subscribe } from '../../services/pusher';
-import { nanoid } from 'nanoid';
+import uid from '../../utils/uid';
 
 export default {
   namespaced: true,
@@ -27,7 +27,7 @@ export default {
   actions: {
     ready: ({ state, commit, dispatch, rootState }, { name }) => {
       if (!state.id) {
-        commit('id', nanoid(6 ));
+        commit('id', uid());
       }
       commit('ready', true);
       commit('name', name);
