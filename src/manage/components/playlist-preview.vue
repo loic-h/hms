@@ -17,7 +17,7 @@
       @play="onTrackPlay"
       @pause="onTrackPause" />
     <div class="playlist-preview__footer">
-      <cta class="playlist-preview__cta" :block="true" :href="`/create/${playlist.id}`">
+      <cta class="playlist-preview__cta" :block="true" :to="`/create/${playlist.id}`">
         Create
       </cta>
     </div>

@@ -77,7 +77,6 @@ export default {
   position: sticky;
   bottom: 0;
   width: 100%;
-  padding: 1rem;
   background-color: var(--black);
   color: var(--white);
   box-sizing: border-box;
@@ -86,6 +85,8 @@ export default {
   &__container {
     display: flex;
     align-items: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   &__controls {
@@ -105,10 +106,23 @@ export default {
 
   &__infos {
     flex-grow: 1;
+    margin-right: 1rem;
+    overflow: hidden;
+
+    a {
+      display: block;
+    }
   }
 
   &__name {
     font-weight: 900;
+  }
+
+  &__name,
+  &__artist {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   a {
