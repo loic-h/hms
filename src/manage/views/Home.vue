@@ -1,13 +1,16 @@
-<template>
+`<template>
   <page class="home container">
     <div class="home__header">
       <user
         v-if="name"
         :name="name"
         class="home__user" />
-      <cta
+      <a
         v-else
-        :href="$options.authorize">Connect</cta>
+        :href="$options.authorize"
+        class="link">
+        Connect
+      </a>
     </div>
 
     <div class="home__body">
@@ -123,3 +126,4 @@ export default {
   }
 }
 </style>
+`

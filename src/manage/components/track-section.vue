@@ -14,7 +14,7 @@
       </div>
       <button @click="reveal" class="track-section__reveal">
           <span class="material-icons">error_outline</span>
-          <span>Reveal</span>
+          <span class="link">Reveal</span>
         </button>
     </div>
     <play-button
