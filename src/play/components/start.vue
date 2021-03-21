@@ -50,5 +50,9 @@ export default {
   &__input {
     margin-bottom: 1rem;
   }
+
+  button {
+    width: 100%;
+  }
 }
 </style>

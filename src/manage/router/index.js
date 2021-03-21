@@ -8,7 +8,13 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter: async (to) => {
+      const hashParams = new URLSearchParams(to.hash.slice(1));
+      if (hashParams.get('token_type') === 'Bearer') {
+        store.dispatch('spotify/token', hashParams.get('access_token'));
+      }
+    }
   },
 
   {

@@ -5,6 +5,7 @@ import tracks from './tracks';
 import games from './games';
 import users from './users';
 import player from './player';
+import spotify from './spotify';
 
 import VuexPersistence from 'vuex-persist';
 
@@ -24,7 +25,8 @@ export default new Vuex.Store({
     tracks,
     games,
     users,
-    player
+    player,
+    spotify
   },
 
   plugins: [vuexLocal.plugin]

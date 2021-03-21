@@ -51,16 +51,27 @@ export default {
   },
 
   actions: {
+    init: async ({ state, commit }) => {
+      commit('audio', new Audio());
+      state.audio.play();
+      state.audio.pause();
+      state.audio.currentTime = 0;
+    },
     src: async ({ state, getters, commit, dispatch }, payload) => {
       if (state.audio) {
         dispatch('stop');
+      } else {
+        await dispatch('init');
       }
       commit('src', payload)
-      await commit('audio', new Audio());
       commit('volume', 0.2);
       commit('playing', true);
       state.audio.addEventListener('loadedmetadata', () => {
         commit('duration', state.audio.duration);
+      });
+      state.audio.addEventListener('loaded', () => {
+        commit('currentTime', state.currentTime);
+        state.audio.currentTime = state.currentTime;
       });
       state.audio.addEventListener('canplaythrough', () => {
         state.audio.play();
@@ -80,7 +91,7 @@ export default {
         state.audio.play();
       }
       if (typeof currentTime !== 'undefined') {
-        state.audio.currentTime = currentTime;
+        commit('currentTime', currentTime);
       }
       requestAnimationFrame(() => dispatch('progress'));
       commit('playing', true);
@@ -96,7 +107,6 @@ export default {
     stop: ({ state, commit }) => {
       if (state.audio) {
         state.audio.src = '';
-        state.audio = null;
       }
       commit('src', null);
       commit('playing', false);

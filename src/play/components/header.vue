@@ -1,21 +1,22 @@
 <template>
   <header class="header">
     <logo class="header__logo" />
-    <div class="header__user">
-      <div class="material-icons">face</div>
-      <span>{{ name }}</span>
-    </div>
+    <user
+      class="header__user"
+      :name="name" />
   </header>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Logo from '../../shared/components/logo';
+import User from '../../shared/components/user';
 
 export default {
   name: 'Header',
   components: {
-    Logo
+    Logo,
+    User
   },
   computed: {
     ...mapState('user', ['name'])
@@ -36,12 +37,6 @@ export default {
 
   &__user {
     justify-self: flex-end;
-    display: flex;
-    align-items: center;
-
-    div {
-      margin-right: 0.5rem;
-    }
   }
 }
 </style>

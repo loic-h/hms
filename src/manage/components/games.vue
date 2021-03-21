@@ -5,7 +5,7 @@
       <li
         v-for="item in games"
         :key="item.id">
-        <router-link :to="item.manageUrl">
+        <router-link class="link" :to="item.manageUrl">
           {{ item.name || item.id }}
         </router-link>
       </li>

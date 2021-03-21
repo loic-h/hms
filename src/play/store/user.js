@@ -31,6 +31,7 @@ export default {
       }
       commit('ready', true);
       commit('name', name);
+      dispatch('audio/init', null, { root: true });
       subscribe(rootState.game.id)
         .then(() => {
           dispatch('join');

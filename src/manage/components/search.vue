@@ -79,6 +79,7 @@ export default {
     padding-top: 2rem;
     width: 100%;
     max-width: 30rem;
+    padding-bottom: 2rem;
 
     li {
 
