@@ -115,6 +115,7 @@ export default {
   &__logo {
     margin-bottom: 3rem;
     text-decoration: none;
+    flex-shrink: 0;
   }
 
   &__my-playlists {

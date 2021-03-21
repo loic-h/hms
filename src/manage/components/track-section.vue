@@ -20,29 +20,33 @@
           <span class="link">Reveal</span>
         </button>
     </div>
-    <play-button
-      class="track-section__controls"
-      :playing="isCurrentPlaying"
-      @play="play"
-      @pause="pause" />
-    <div class="track-section__infos">
-      <h2 class="track-section__name h1">{{ selectedItem.name }}</h2>
-      <div class="track-section__artist">{{ selectedItem.artist }}</div>
+    <div class="track-section__content">
+      <progress-play-button
+        class="track-section__play"
+        :playing="isCurrentPlaying"
+        :size="120"
+        :stroke="12"
+        @play="play"
+        @pause="pause" />
+      <div class="track-section__infos">
+        <h2 class="track-section__name h1">{{ selectedItem.name }}</h2>
+        <div class="track-section__artist">{{ selectedItem.artist }}</div>
+      </div>
+      <track-section-user class="track-section__users" />
     </div>
-    <track-section-user />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import PlayButton from './play-button';
+import ProgressPlayButton from './progress-play-button';
 import TrackSectionUser from './track-section-user';
 
 export default {
   name: 'TrackSection',
 
   components: {
-    PlayButton,
+    ProgressPlayButton,
     TrackSectionUser
   },
 
@@ -131,7 +135,14 @@ export default {
     }
   }
 
-  &__controls {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__play {
+    margin-bottom: 1rem;
 
     button {
       @include icon(xl);
@@ -139,8 +150,16 @@ export default {
     }
   }
 
+  &__infos {
+    text-align: center;
+  }
+
   &__name {
     margin-bottom: 0.5rem;
+  }
+
+  &__users {
+    width: 100%;
   }
 }
 </style>

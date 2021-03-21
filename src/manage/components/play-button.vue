@@ -28,6 +28,7 @@ export default {
 
   button {
     display: block;
+    margin: 0;
   }
 }
 </style>
