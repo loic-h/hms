@@ -122,6 +122,7 @@ export default {
   $root: &;
   flex-grow: 1;
   overflow: hidden;
+  height: 100%;
 
   &__content {
     display: flex;
@@ -153,6 +154,8 @@ export default {
   }
 
   @include media(max-width, l) {
+    display: flex;
+    flex-direction: column;
 
     &__section {
       padding-left: var(--container-padding-s);
@@ -162,6 +165,12 @@ export default {
       overflow-x: hidden;
       box-sizing: border-box;
       flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__section-headline {
+      display: none;
     }
 
     @for $i from 1 through 3 {
@@ -178,10 +187,6 @@ export default {
     &__section {
       padding-left: var(--container-padding-xs);
       padding-right: var(--container-padding-xs);
-    }
-
-    &__section-headline {
-      display: none;
     }
   }
 
