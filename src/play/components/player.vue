@@ -15,7 +15,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { listen } from '../../services/pusher';
-import ProgressComponent from './progress';
+import ProgressComponent from '../../shared/components/progress';
 
 export default {
   name: "Player",

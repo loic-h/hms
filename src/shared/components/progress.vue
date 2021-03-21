@@ -1,6 +1,7 @@
 <template>
   <svg
     class="progress"
+    :class="{ 'progress--dark': dark }"
     :height="size"
     :width="size"
   >
@@ -9,7 +10,7 @@
       stroke="currentColor"
       fill="transparent"
       :stroke-width="stroke"
-      :r="normalizedRadius"
+      :r="radius"
       :cx="origin"
       :cy="origin"
     />
@@ -20,7 +21,7 @@
       fill="transparent"
       :style="{ strokeDashoffset }"
       :stroke-width="stroke"
-      :r="normalizedRadius"
+      :r="radius"
       :cx="origin"
       :cy="origin"
     />
@@ -30,22 +31,20 @@
 <script>
 export default {
   props: {
-    radius: { type: Number, default: 60 },
+    size: { type: Number, default: 120 },
     progress: { type: Number, default: 0 },
-    stroke: { Number, default: 12 }
+    stroke: { Number, default: 12 },
+    dark: { type: Boolean, default: false }
   },
   computed: {
     strokeDashoffset() {
       return this.circumference - this.progress / 100 * this.circumference;
     },
-    normalizedRadius() {
-      return this.radius - this.stroke * 2
-    },
     circumference() {
-      return this.normalizedRadius * 2 * Math.PI
+      return this.radius * 2 * Math.PI
     },
-    size() {
-      return this.radius + (this.stroke * 2);
+    radius() {
+      return (this.size - (this.stroke * 2)) / 2;
     },
     origin() {
       return this.size * 0.5;
@@ -56,6 +55,8 @@ export default {
 
 <style lang="scss">
 .progress {
+  $root: &;
+  display: block;
 
   &__progress {
     transition: stroke-dashoffset 0.1s;
@@ -66,6 +67,16 @@ export default {
 
   &__background {
     color: var(--grey-pale);
+  }
+
+  &--dark {
+    #{$root}__progress {
+      color: var(--white);
+    }
+
+    #{$root}__background {
+      color: var(--grey);
+    }
   }
 }
 </style>

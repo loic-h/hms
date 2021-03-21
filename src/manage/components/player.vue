@@ -1,11 +1,15 @@
 <template>
   <div class="player">
     <div class="player__container container">
-      <play-button
-        class="player__controls"
-        :playing="isPlaying(id)"
-        @play="play(id)"
-        @pause="pause" />
+      <div class="player__controls">
+        <progress-component :size="40" :progress="progress" :stroke="4" :dark="true" />
+        <play-button
+          class="player__play"
+          :playing="isPlaying(id)"
+          :circle="false"
+          @play="play(id)"
+          @pause="pause" />
+      </div>
       <div class="player__infos">
         <router-link :to="url">
           <div class="player__name">{{ name }}</div>
@@ -23,11 +27,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import PlayButton from './play-button';
+import ProgressComponent from '../../shared/components/progress';
 
 export default {
   name: "Player",
   components: {
-    PlayButton
+    PlayButton,
+    ProgressComponent
   },
   computed: {
     ...mapState('player', ['id']),
@@ -41,6 +47,7 @@ export default {
       trackById: 'itemById'
     }),
     ...mapGetters('games', ['trackUrl']),
+    ...mapGetters('audio', ['progress']),
     name() {
       return this.track ? this.track.name : '-';
     },
@@ -82,13 +89,18 @@ export default {
   }
 
   &__controls {
+    position: relative;
     margin-right: 1rem;
+  }
 
-    button {
-      @include icon(l);
-      display: block;
-      color: var(--white);
-    }
+  &__play {
+    @include icon(s);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    color: var(--white);
   }
 
   &__infos {
