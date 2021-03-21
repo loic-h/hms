@@ -11,14 +11,14 @@
           @pause="pause" />
       </div>
       <div class="player__infos">
-        <router-link :to="url">
+        <div @click="onInfosClick">
           <div class="player__name">{{ name }}</div>
           <div class="player__artist">{{ artist }}</div>
-        </router-link>
+        </div>
       </div>
       <button
         v-if="nextTrack"
-        @click="$store.dispatch('player/next')"
+        @click="goNext"
         class="material-icons">skip_next</button>
     </div>
   </div>
@@ -31,10 +31,14 @@ import ProgressComponent from '../../shared/components/progress';
 
 export default {
   name: "Player",
+
   components: {
     PlayButton,
     ProgressComponent
   },
+
+  emits: ['show-track-section'],
+
   computed: {
     ...mapState('player', ['id']),
     ...mapState({
@@ -59,14 +63,23 @@ export default {
     },
     url() {
       return this.trackUrl(this.trackId);
+    },
+    goNext() {
+      this.$store.dispatch('player/next');
     }
   },
+
   methods: {
     play() {
       this.$store.dispatch('player/play', this.trackId);
     },
     pause() {
       this.$store.dispatch('player/pause');
+    },
+    onInfosClick() {
+      console.log(this.url)
+      this.$router.push(this.url);
+      this.$emit('show-track-section');
     }
   }
 };
@@ -108,8 +121,9 @@ export default {
     flex-grow: 1;
     margin-right: 1rem;
     overflow: hidden;
+    cursor: pointer;
 
-    a {
+    > div {
       display: block;
     }
   }

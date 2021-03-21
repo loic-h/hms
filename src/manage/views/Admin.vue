@@ -2,9 +2,11 @@
   <div class="admin">
     <admin-header />
 
-    <admin-main />
+    <admin-main
+      :section="mainSection"
+      @section="v => mainSection = v" />
 
-    <player />
+    <player @show-track-section="mainSection = 2" />
   </div>
 </template>
 
@@ -21,6 +23,12 @@ export default {
     AdminHeader,
     AdminMain,
     Player
+  },
+
+  data() {
+    return {
+      mainSection: 2
+    };
   },
 
   computed: {

@@ -4,8 +4,8 @@
       <li
         v-for="(icon, index) in ['queue_music', 'speaker', 'group']"
         :key="index"
-        :class="{ 'is-selected': currentSection === index + 1 }">
-        <button @click="currentSection = index + 1">
+        :class="{ 'is-selected': section === index + 1 }">
+        <button @click="$emit('section', index + 1)">
           <span class="material-icons">
             {{ icon }}
           </span>
@@ -16,28 +16,30 @@
 
   <main
     class="admin-main"
-    :class="`admin-main--${currentSection}`"
+    :class="`admin-main--${section}`"
     v-swipe="onMainSwipe">
+    <div class="admin-main__content">
 
-    <div class="admin-main__tracks">
-      <h3 class="admin-main__section-headline h3">
-        <div class="material-icons">queue_music</div>
-        <span>Tracklist</span>
-      </h3>
-      <tracklist
-        @item-click="onItemClick"/>
-    </div>
+      <div class="admin-main__section admin-main__tracks">
+        <h3 class="admin-main__section-headline h3">
+          <div class="material-icons">queue_music</div>
+          <span>Tracklist</span>
+        </h3>
+        <tracklist
+          @item-click="onItemClick"/>
+      </div>
 
-    <div class="admin-main__track">
-      <track-section />
-    </div>
+      <div class="admin-main__section admin-main__track">
+        <track-section />
+      </div>
 
-    <div class="admin-main__players">
-      <h3 class="admin-main__section-headline h3">
-        <div class="material-icons">group</div>
-        <span>Players</span>
-      </h3>
-      <users class="admin-main__users" />
+      <div class="admin-main__section admin-main__players">
+        <h3 class="admin-main__section-headline h3">
+          <div class="material-icons">group</div>
+          <span>Players</span>
+        </h3>
+        <users class="admin-main__users" />
+      </div>
     </div>
   </main>
 </template>
@@ -58,28 +60,32 @@ export default {
     Users,
     InputText
   },
-  data() {
-    return {
-      currentSection: 2
-    }
+
+  emits: ['section'],
+
+  props: {
+    section: { type: Number, default: null }
   },
+
   computed: {
     ...mapState({
       playlist: state => state.playlists.name,
     }),
     ...mapGetters('games', ['trackUrl'])
   },
+
   methods: {
     onItemClick(id) {
-      this.currentSection = 2;
+      this.$emit('section', 2);
       this.$router.push(this.trackUrl(id));
     },
+
     onMainSwipe(e) {
-      if (e.direction === 2 && this.currentSection < 3) {
-        this.currentSection = this.currentSection + 1;
+      if (e.direction === 2 && this.section < 3) {
+        this.$emit('section', this.section + 1);
       }
-      if (e.direction === 4 && this.currentSection > 1) {
-        this.currentSection = this.currentSection - 1;
+      if (e.direction === 4 && this.section > 1) {
+        this.$emit('section', this.section - 1);
       }
     }
   }
@@ -113,12 +119,14 @@ export default {
 }
 
 .admin-main {
-  display: flex;
+  $root: &;
   flex-grow: 1;
   overflow: hidden;
 
-  > div {
-    overflow: auto;
+  &__content {
+    display: flex;
+    position: relative;
+    height: 100%;
   }
 
   &__tracks,
@@ -134,31 +142,40 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 1rem;
+    padding-bottom: 0.5rem;
+    position: sticky;
+    top: 0;
+    background-color: var(--white);
 
-    > div {
+    &__section {
       margin-right: 0.25rem;
     }
   }
 
   @include media(max-width, l) {
-    > div {
-      display: none;
+
+    &__section {
       padding-left: var(--container-padding-s);
       padding-right: var(--container-padding-s);
       padding-top: 1rem;
+      width: 100vw;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      flex-shrink: 0;
     }
 
     @for $i from 1 through 3 {
       &--#{$i} {
-        > div:nth-child(#{$i}) {
-          display: block;
+
+        #{$root}__content {
+          left: -#{($i - 1) * 100}vw;
         }
       }
     }
   }
 
   @include media(max-width, s) {
-    > div {
+    &__section {
       padding-left: var(--container-padding-xs);
       padding-right: var(--container-padding-xs);
     }
@@ -171,6 +188,10 @@ export default {
   @include media(min-width, l) {
     padding-left: var(--container-padding-s);
     padding-right: var(--container-padding-s);
+
+    &__section {
+      overflow: auto;
+    }
 
     &__track {
       padding: 0 2rem;
