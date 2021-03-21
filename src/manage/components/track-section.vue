@@ -12,14 +12,17 @@
           </span>
         </div>
       </div>
-      <button @click="reveal" class="track-section__reveal">
-          <span class="material-icons">error_outline</span>
+      <button
+        v-if="selectedItem.id === currentPlayerTrackId"
+        @click="reveal"
+        class="track-section__reveal">
+          <span class="material-icons">{{ revealIcon }}</span>
           <span class="link">Reveal</span>
         </button>
     </div>
     <play-button
       class="track-section__controls"
-      :playing="isPlaying(selectedItem.id)"
+      :playing="isCurrentPlaying"
       @play="play"
       @pause="pause" />
     <div class="track-section__infos">
@@ -31,20 +34,40 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import PlayButton from './play-button';
 import TrackSectionUser from './track-section-user';
 
 export default {
   name: 'TrackSection',
+
   components: {
     PlayButton,
     TrackSectionUser
   },
+
+  data() {
+    return {
+      revealed: false
+    };
+  },
+
   computed: {
     ...mapGetters('tracks', ['selectedItem', 'totalAvailableItems', 'itemPosition']),
-    ...mapGetters('player', ['isPlaying'])
+    ...mapGetters('player', ['isPlaying']),
+    ...mapState('player', {
+      currentPlayerTrackId: state => state.id
+    }),
+
+    isCurrentPlaying() {
+      return this.isPlaying(this.selectedItem.id);
+    },
+
+    revealIcon() {
+      return this.revealed ? 'check' : 'error_outline';
+    }
   },
+
   methods: {
     play() {
       this.$store.dispatch('player/play', this.selectedItem.id);
@@ -54,6 +77,8 @@ export default {
     },
     reveal() {
       this.$store.dispatch('tracks/reveal');
+      this.revealed = true;
+      setTimeout(() => this.revealed = false, 1000);
     }
   }
 }
