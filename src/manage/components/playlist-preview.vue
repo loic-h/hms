@@ -17,9 +17,12 @@
       @play="onTrackPlay"
       @pause="onTrackPause" />
     <div class="playlist-preview__footer">
-      <cta class="playlist-preview__cta" :block="true" :to="`/create/${playlist.id}`">
+      <cta class="playlist-preview__cta" :block="true" :to="`/create/${playlist.id}?connected=${connectedGame}`">
         Create
       </cta>
+      <input-checkbox class="playlist-preview__connected" v-model="connectedGame">
+        Players have a spotify account
+      </input-checkbox>
     </div>
   </div>
 </template>
@@ -28,12 +31,19 @@
 import { mapGetters } from 'vuex';
 import Tracklist from './tracklist';
 import Cta from '../../shared/components/cta';
+import InputCheckbox from '../../shared/components/input-checkbox';
 
 export default {
   name: 'PlaylistPreview',
   components: {
     Tracklist,
-    Cta
+    Cta,
+    InputCheckbox
+  },
+  data() {
+    return {
+      connectedGame: false
+    };
   },
   computed: {
     ...mapGetters('playlists', {
@@ -82,6 +92,8 @@ export default {
   }
 
   &__footer {
+    display: flex;
+    flex-direction: column;
     background-color: var(--white);
     padding: 1rem 0;
     position: sticky;
@@ -89,6 +101,10 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+
+  &__connected {
+    padding-top: 0.5rem;
   }
 }
 </style>

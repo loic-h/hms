@@ -22,7 +22,8 @@ const routes = [
     name: 'Create',
     beforeEnter: async (to) => {
       const { playlistId } = to.params;
-      const game = await store.dispatch('games/fetch', { playlistId });
+      const { connected } = to.query;
+      const game = await store.dispatch('games/fetch', { playlistId, connected });
       return { path: game.manageUrl };
     }
   },

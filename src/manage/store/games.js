@@ -10,7 +10,8 @@ export default {
     /* {
       id: String,
       playlistId: String,
-      name: String
+      name: String,
+      connected: false // Use spotify SDK to play music
     } */
     ]
   },
@@ -75,9 +76,9 @@ export default {
   },
 
   actions: {
-    fetch: async ({ getters, commit, dispatch }, { id, playlistId }) => {
+    fetch: async ({ getters, commit, dispatch }, { id, playlistId, connected }) => {
       if (!id) {
-        id = await dispatch('create', playlistId);
+        id = await dispatch('create', { playlistId, connected });
       }
       commit('id', id);
       const game = getters.itemById(id);
@@ -88,13 +89,14 @@ export default {
       return game;
     },
 
-    create: ({ commit, rootGetters }, playlistId) => {
+    create: ({ commit, rootGetters }, { playlistId, connected }) => {
       const playlist = rootGetters['playlists/itemById'](playlistId);
       const id = uid();
       commit('addItem', {
         id,
         playlistId,
-        name: playlist.name
+        name: playlist.name,
+        connected
       });
       return id;
     },
