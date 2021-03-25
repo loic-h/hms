@@ -1,26 +1,27 @@
 <template>
   <div class="player">
-    <progress-component :radius="120" :progress="progress" :stroke="24" />
-    <div class="player__status">
-      <template v-if="playing">
-        Playing
-      </template>
-      <template v-else>
-        Waiting
-      </template>
-    </div>
+    <circle-progress :size="160" :progress="progress" :stroke="16">
+      <div class="player__status">
+        <template v-if="playing">
+          Playing
+        </template>
+        <template v-else>
+          Waiting
+        </template>
+      </div>
+    </circle-progress>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { listen } from '../../services/pusher';
-import ProgressComponent from '../../shared/components/progress';
+import CircleProgress from '../../shared/components/circle-progress';
 
 export default {
   name: "Player",
   components: {
-    ProgressComponent
+    CircleProgress
   },
   mounted() {
     this.initAudio();

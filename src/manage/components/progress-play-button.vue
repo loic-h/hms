@@ -1,25 +1,26 @@
 <template>
   <div class="progress-play-button" :style="{ width: `${size}px`, height: `${size}px` }">
-    <progress-component :size="size" :progress="progress" :stroke="stroke" :dark="dark" />
-    <play-button
-      class="progress-play-button__buttons"
-      :circle="false"
-      :playing="playing"
-      @play="$emit('play')"
-      @pause="$emit('pause')" />
+    <circle-progress :size="size" :progress="progress" :stroke="stroke" :dark="dark">
+      <play-button
+        class="progress-play-button__buttons"
+        :circle="false"
+        :playing="playing"
+        @play="$emit('play')"
+        @pause="$emit('pause')" />
+    </circle-progress>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import ProgressComponent from '../../shared/components/progress';
+import CircleProgress from '../../shared/components/circle-progress';
 import PlayButton from './play-button';
 
 export default {
   name: 'ProgressPlayButton',
 
   components: {
-    ProgressComponent,
+    CircleProgress,
     PlayButton
   },
 
@@ -46,15 +47,6 @@ export default {
 
 <style lang="scss">
 .progress-play-button {
-  position: relative;
 
-  &__buttons {
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: block;
-  }
 }
 </style>

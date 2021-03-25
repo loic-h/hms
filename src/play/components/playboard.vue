@@ -114,6 +114,9 @@ export default {
     flex-grow: 1;
     width: 25rem;
     max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   &__track-infos {
@@ -125,6 +128,11 @@ export default {
 
   &__name {
     margin-bottom: 0.5rem;
+  }
+
+  &__player {
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
