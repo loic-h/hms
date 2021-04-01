@@ -44,7 +44,9 @@ export default {
     decoratedItems: (state) => {
       return [...state.items].map(a => {
         const playUrl = new URL(`/play/${a.id}`, window.location.origin);
-        // playUrl.searchParams.append('pid', a.playlistId);
+        if (a.connected) {
+          playUrl.searchParams.append('connected', a.connected);
+        }
         return {
           ...a,
           playUrl: playUrl.toString(),
@@ -72,6 +74,13 @@ export default {
 
     trackUrl: (state, getters) => id => {
       return `${getters.currentItem.manageUrl}/${id}`;
+    },
+
+    isGameConnected: (state, getters) => {
+      if (!getters.currentItem) {
+        return;
+      }
+      return getters.currentItem.connected;
     }
   },
 
@@ -81,11 +90,17 @@ export default {
         id = await dispatch('create', { playlistId, connected });
       }
       commit('id', id);
+
       const game = getters.itemById(id);
       if (!game) {
         return;
       }
       await dispatch('tracks/fetch', { id: game.playlistId }, {root: true });
+
+      if (game.connected) {
+        dispatch('spotify/loadPlayer', null, { root: true });
+      }
+
       return game;
     },
 
@@ -106,16 +121,18 @@ export default {
       commit('id', null);
     },
 
-    room: async ({ state, commit, dispatch, rootState, rootGetters }) => {
+    room: async ({ state, getters, commit, dispatch, rootState, rootGetters }) => {
       subscribe(state.id)
         .then(() => {
           // Reconnect clients
           push('room', {});
           listen('join', ({ name, id, gameId }) => {
             commit('users/item', { name, id, gameId }, { root: true });
+            const game = getters.itemById(gameId);
             let data = {
               title: rootGetters['playlists/name'],
-              totalTracks: rootGetters['tracks/totalAvailableItems']
+              totalTracks: rootGetters['tracks/totalAvailableItems'],
+              connect: game.connected
             };
             if (rootState.audio.playing) {
               data = {

@@ -19,7 +19,8 @@ module.exports = async (req, res) => {
         id: a.track.id,
         preview: a.track.preview_url,
         artists: a.track.artists.map(b => b.name),
-        name: a.track.name
+        name: a.track.name,
+        uri: a.track.uri
       };
     })
     res.json({

@@ -20,7 +20,10 @@
       <cta class="playlist-preview__cta" :block="true" :to="`/create/${playlist.id}?connected=${connectedGame}`">
         Create
       </cta>
-      <input-checkbox class="playlist-preview__connected" v-model="connectedGame">
+      <input-checkbox
+        v-if="connected"
+        class="playlist-preview__connected"
+        v-model="connectedGame">
         Players have a spotify account
       </input-checkbox>
     </div>
@@ -28,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Tracklist from './tracklist';
 import Cta from '../../shared/components/cta';
 import InputCheckbox from '../../shared/components/input-checkbox';
@@ -49,7 +52,8 @@ export default {
     ...mapGetters('playlists', {
       playlist: 'current'
     }),
-    ...mapGetters('tracks', ['playingItemId'])
+    ...mapGetters('tracks', ['playingItemId']),
+    ...mapGetters('spotify', ['connected'])
   },
   beforeUnmount() {
     this.$store.dispatch('audio/stop');
@@ -100,7 +104,7 @@ export default {
     bottom: 0;
     width: 100%;
     display: flex;
-    justify-content: center;
+    align-items: center;
   }
 
   &__connected {

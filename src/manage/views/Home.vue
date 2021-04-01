@@ -5,12 +5,12 @@
         v-if="name"
         :name="name"
         class="home__user" />
-      <a
+      <button
         v-else
-        :href="$options.authorize"
+        @click="connect"
         class="link">
         Connect
-      </a>
+      </button>
     </div>
 
     <div class="home__body">
@@ -49,7 +49,7 @@ import Games from '../components/games';
 import PlaylistPreview from '../components/playlist-preview';
 import Cta from '../../shared/components/cta';
 import User from '../../shared/components/user';
-import { authorizeEndpoint } from "../../services/spotify";
+import { connect } from "../../services/spotify";
 
 export default {
   name: 'Home',
@@ -62,7 +62,6 @@ export default {
     Cta,
     User
   },
-  authorize: authorizeEndpoint,
   data() {
     return {
       searchValue: null
@@ -80,6 +79,10 @@ export default {
   methods: {
     myPlaylists() {
       this.$store.dispatch('spotify/playlists');
+    },
+
+    connect() {
+      connect();
     }
   }
 };

@@ -27,6 +27,9 @@ export default {
         return;
       }
       const track = rootGetters['tracks/itemById'](id);
+      if (rootGetters['games/isGameConnected']) {
+        return rootGetters['spotify/isPlaying'](track.uri);
+      }
       return rootGetters['audio/isPlaying'](track.preview);
     },
 
@@ -38,18 +41,29 @@ export default {
   actions: {
     play: async ({ getters, commit, dispatch, rootState, rootGetters }, id) => {
       commit('id', id);
-      const src = getters.track.preview;
-      await dispatch('audio/play', { src }, { root: true });
+      let src, uri;
+      if (rootGetters['games/isGameConnected']) {
+        uri = getters.track.uri;
+        await dispatch('spotify/play', { uri }, { root: true });
+      } else  {
+        src = getters.track.preview;
+        dispatch('audio/play', { src }, { root: true });
+      }
       push('play', {
         id,
         position: rootGetters['tracks/itemPosition'](id),
-        src: rootState.audio.src,
+        src,
+        uri,
         currentTime: rootState.audio.currentTime
       });
     },
 
-    pause: ({ dispatch }) => {
-      dispatch('audio/pause', null, { root: true });
+    pause: ({ dispatch, rootGetters }) => {
+      if (rootGetters['games/isGameConnected']) {
+        dispatch('spotify/pause', null, { root: true });
+      } else  {
+        dispatch('audio/pause', null, { root: true });
+      }
       push('pause', {});
     },
 

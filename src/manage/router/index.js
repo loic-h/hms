@@ -13,7 +13,11 @@ const routes = [
       const hashParams = new URLSearchParams(to.hash.slice(1));
       if (hashParams.get('token_type') === 'Bearer') {
         store.dispatch('spotify/token', hashParams.get('access_token'));
+        if (store.state.games.id) {
+          return { name: 'Admin', params: { id: store.state.games.id } };
+        }
       }
+      store.commit('games/id', null);
     }
   },
 
@@ -29,11 +33,14 @@ const routes = [
   },
 
   {
-    path: '/manage/:id/:trackId?',
+    path: '/manage/:id?/:trackId?',
     name: 'Admin',
     component: Admin,
     beforeEnter: async (to, from) => {
-      const { id } = to.params;
+      let { id } = to.params;
+      if (!id) {
+        return { name: 'Home' };
+      }
       let game;
       try {
         game = await store.dispatch('games/fetch', { id });
