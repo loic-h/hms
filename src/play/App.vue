@@ -10,7 +10,6 @@ export default {
     ...mapState('spotify', ['token'])
   },
   mounted() {
-    console.log(token)
     if (token) {
       this.$store.dispatch('spotify/token', token);
     }

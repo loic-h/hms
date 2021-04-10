@@ -8,7 +8,6 @@ const params = {
   response_type: 'token'
 };
 let player;
-let popup;
 let playerId;
 
 for (const [key, value] of Object.entries(params)) {

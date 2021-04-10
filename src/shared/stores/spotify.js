@@ -49,7 +49,7 @@ export default {
   },
 
   actions: {
-    token: async ({ commit, dispatch }, payload) => {
+    token: async ({ commit }, payload) => {
       commit('token', payload);
       const body = await getUser({ token: payload });
       commit('name', body.display_name);
@@ -73,7 +73,7 @@ export default {
       loadSpotifySDK(state.token)
         .then(player => {
           commit('player', player);
-          player.addListener('player_state_changed', paylaod => dispatch('status', payload));
+          player.addListener('player_state_changed', payload => dispatch('status', payload));
         });
     },
 
@@ -89,7 +89,7 @@ export default {
 
     status: ({ commit }, payload) => {
       commit('playing', !payload.paused);
-      commit('uri', paylaod.track_window.current_track.uri);
+      commit('uri', payload.track_window.current_track.uri);
     }
   }
 };
