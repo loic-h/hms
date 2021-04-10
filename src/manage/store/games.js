@@ -80,7 +80,7 @@ export default {
       if (!getters.currentItem) {
         return;
       }
-      return getters.currentItem.connected;
+      return !!getters.currentItem.connected;
     }
   },
 

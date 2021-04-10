@@ -61,12 +61,19 @@ export default {
       return getters.itemById(state.id);
     },
 
-    availableItems: (state) => {
+    availableItems: (state, getters, rootState, rootGetters) => {
+      if (rootGetters['games/isGameConnected']) {
+        return state.items;
+      }
       return state.items.filter(a => a.preview);
     },
 
     totalAvailableItems: (state, getters) => {
       return getters.availableItems.length;
+    },
+
+    isItemAvailable: (state, getters) => (id) => {
+      return getters.availableItems.find(a => a.id === id);
     },
 
     itemIndex: (state, getters) => {
@@ -77,14 +84,14 @@ export default {
       return getters.itemIndex + 1;
     },
 
-    playingItemId(state, getters, rootState, rootGetters) {
-      const preview = rootState.audio.src;
-      if (!rootGetters['audio/isPlaying'](preview)) {
-        return;
-      }
-      const track = getters.itemByPreview(preview);
-      return track && track.id;
-    }
+    // playingItemId(state, getters, rootState, rootGetters) {
+      // const preview = rootState.audio.src;
+      // if (!rootGetters['audio/isPlaying'](preview)) {
+      //   return;
+      // }
+      // const track = getters.itemByPreview(preview);
+      // return track && track.id;
+    // }
   },
 
   actions: {

@@ -7,7 +7,7 @@
     </a>
     <div class="admin-header__title">
       <h1 class="h1">
-        {{ game.name }}
+        {{ game && game.name }}
       </h1>
     </div>
 

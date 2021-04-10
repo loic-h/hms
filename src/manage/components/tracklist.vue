@@ -10,6 +10,7 @@
       :controls="controls"
       :selected="trackId === item.id || (selectPlaying && playingItemId === item.id)"
       :is-playing="item.id === playingItemId"
+      :connected-game="connectedGame"
       @click="onItemClick(item)"
       @play="$emit('play', item)"
       @pause="$emit('pause', item)" />
@@ -21,14 +22,15 @@ import { mapState, mapGetters } from 'vuex';
 import TracklistItem from "./tracklist-item";
 
 export default {
-  name: "Tracks",
+  name: "Tracklist",
   components: {
     TracklistItem
   },
   props: {
     controls: { type: Boolean, default: false },
     playingItemId: { type: String, default: null },
-    selectPlaying: { type: Boolean, default: false }
+    selectPlaying: { type: Boolean, default: false },
+    connectedGame: { type: Boolean, default: null }
   },
   computed: {
     ...mapState({
@@ -38,9 +40,6 @@ export default {
   },
   methods: {
     onItemClick(item) {
-      if (!item.preview) {
-        return;
-      }
       this.$emit('item-click', item.id);
     }
   }

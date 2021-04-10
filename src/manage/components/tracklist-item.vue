@@ -2,7 +2,7 @@
   <div
     class="tracklist-item"
     :class="{
-      'tracklist-item--disabled': !preview,
+      'tracklist-item--disabled': !previewAvailable,
       'tracklist-item--selected': selected
     }">
     <div class="tracklist-item__infos">
@@ -10,7 +10,7 @@
       <span>{{ artist }}</span>
     </div>
     <play-button
-      v-if="controls && preview"
+      v-if="displayControls"
       class="tracklist-item__controls"
       :playing="isPlaying"
       @play="$emit('play')"
@@ -19,10 +19,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import PlayButton from './play-button';
 
 export default {
-  name: 'PlaylistPreviewItem',
+  name: 'TracklistItem',
   components: {
     PlayButton
   },
@@ -33,7 +34,31 @@ export default {
     preview: { type: String, default: null },
     controls: { type: Boolean, default: false },
     selected: { type: Boolean, default: false },
-    isPlaying: { type: Boolean, default: false }
+    isPlaying: { type: Boolean, default: false },
+    connectedGame: { type: Boolean, default: null }
+  },
+  computed: {
+    ...mapGetters('games', ['isGameConnected']),
+    isGameConnectedComputed() {
+      if (typeof this.isGameConnected !== 'undefined' && this.isGameConnected !== null) {
+        return this.isGameConnected;
+      }
+      if (typeof this.connectedGame !== 'undefined' && this.connectedGame !== null) {
+        return this.connectedGame;
+      }
+    },
+    previewAvailable() {
+      if (this.isGameConnectedComputed) {
+        return true;
+      }
+      return !!this.preview;
+    },
+    displayControls() {
+      if (!this.controls) {
+        return;
+      }
+      return this.previewAvailable;
+    }
   }
 }
 </script>

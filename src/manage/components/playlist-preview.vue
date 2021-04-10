@@ -14,10 +14,11 @@
       :controls="true"
       :selectPlaying="true"
       :playing-item-id="playingItemId"
+      :connected-game="connectedGame"
       @play="onTrackPlay"
       @pause="onTrackPause" />
     <div class="playlist-preview__footer">
-      <cta class="playlist-preview__cta" :block="true" :to="`/create/${playlist.id}?connected=${connectedGame}`">
+      <cta class="playlist-preview__cta" :block="true" :to="createUrl">
         Create
       </cta>
       <input-checkbox
@@ -49,24 +50,46 @@ export default {
     };
   },
   computed: {
+    ...mapState('audio', ['playingId']),
+    ...mapGetters('audio', ['isPlaying']),
     ...mapGetters('playlists', {
       playlist: 'current'
     }),
-    ...mapGetters('tracks', ['playingItemId']),
-    ...mapGetters('spotify', ['connected'])
+    ...mapGetters('spotify', ['connected']),
+
+    playingItemId() {
+      if (this.playingId && this.isPlaying(this.playingId, this.connectedGame)) {
+        return this.playingId;
+      }
+    },
+
+    createUrl() {
+      const url = `/create/${this.playlist.id}`;
+      if (this.connectedGame) {
+        url += `?connected=${this.connectedGame ? 1 : 0}`
+      }
+      return url;
+    }
   },
   beforeUnmount() {
-    this.$store.dispatch('audio/stop');
+    this.$store.dispatch('audio/stop'), { connected: this.connectedGame };
+  },
+  watch: {
+    connectedGame(v) {
+      if (v) {
+        this.$store.dispatch('spotify/loadPlayer');
+      }
+    }
   },
   methods: {
     back() {
       this.$store.dispatch('tracks/reset');
     },
     onTrackPlay(item) {
-      this.$store.dispatch('audio/play', { src: item.preview });
+      this.$store.dispatch('audio/play', { ...item, connected: this.connectedGame });
     },
     onTrackPause(item) {
-      this.$store.dispatch('audio/pause');
+      this.$store.dispatch('audio/pause', { connected: this.connectedGame });
     }
   }
 }

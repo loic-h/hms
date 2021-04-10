@@ -26,6 +26,7 @@
           <span>Tracklist</span>
         </h3>
         <tracklist
+          :connected-game="isGameConnected"
           @item-click="onItemClick"/>
       </div>
 
@@ -71,11 +72,15 @@ export default {
     ...mapState({
       playlist: state => state.playlists.name,
     }),
-    ...mapGetters('games', ['trackUrl'])
+    ...mapGetters('games', ['trackUrl', 'isGameConnected']),
+    ...mapGetters('tracks', ['isItemAvailable'])
   },
 
   methods: {
     onItemClick(id) {
+      if (!this.isItemAvailable(id)) {
+        return;
+      }
       this.$emit('section', 2);
       this.$router.push(this.trackUrl(id));
     },

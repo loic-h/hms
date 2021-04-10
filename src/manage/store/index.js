@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 import audio from '../../shared/stores/audio';
+import audioNative from '../../shared/stores/audio-native';
 import spotify from '../../shared/stores/spotify';
 import playlists from './playlists';
 import tracks from './tracks';
@@ -27,7 +28,8 @@ export default new Vuex.Store({
     games,
     users,
     player,
-    spotify
+    spotify,
+    audioNative
   },
 
   plugins: [vuexLocal.plugin]

@@ -43,7 +43,7 @@ export default {
       return !!state.token;
     },
 
-    isPlaying: (state) => async (uri) => {
+    isPlaying: (state) => (uri) => {
       return state.uri === uri && state.playing;
     },
   },
@@ -51,9 +51,13 @@ export default {
   actions: {
     token: async ({ commit }, payload) => {
       commit('token', payload);
-      const body = await getUser({ token: payload });
-      commit('name', body.display_name);
-      commit('id', body.id);
+      try {
+        const body = await getUser({ token: payload });
+        commit('name', body.display_name);
+        commit('id', body.id);
+      } catch {
+        console.log('Spotify user not connected');
+      }
     },
 
     playlists: ({ state, commit }) => {
@@ -66,7 +70,10 @@ export default {
         });
     },
 
-    loadPlayer: ({ state, commit, getters, rootState }) => {
+    loadPlayer: ({ state, commit, getters, dispatch }) => {
+      if (state.player) {
+        return;
+      }
       if (!getters.connected) {
         connect();
       }

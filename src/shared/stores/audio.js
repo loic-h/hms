@@ -2,119 +2,83 @@ export default {
   namespaced: true,
 
   state: {
-    audio: null,
-    src: null,
-    currentTime: null,
-    duration: null,
-    volume: null,
-    playing: false
+    playingId: null
   },
 
   mutations: {
-    audio: (state, payload) => {
-      state.audio = payload;
-    },
-
-    src: (state, payload) => {
-      state.src = payload;
-    },
-
-    playing: (state, payload) => {
-      state.playing = payload;
-    },
-
-    currentTime: (state, payload) => {
-      state.currentTime = payload;
-    },
-
-    volume: (state, payload) => {
-      state.volume = payload;
-      state.audio.volume = payload;
-    },
-
-    duration: (state, payload) => {
-      state.duration = payload;
+    playingId: (state, payload) => {
+      state.playingId = payload;
     }
   },
 
   getters: {
-    isPlaying: (state) => (src) => {
-      return state.src === src && state.playing === true;
+    connected: (state, getters, rootSate, rootGetters) => connected => {
+      if (typeof connected === 'boolean') {
+        return (connected);
+      }
+      if (typeof rootGetters['games/isGameConnected'] === 'boolean') {
+        return (rootGetters['games/isGameConnected']);
+      }
     },
 
-    progress: (state) => {
-      if (!state.duration) {
-        return 0;
+    isPlaying: (state, getters, rootSate, rootGetters) => (id, connected) => {
+      if (id !== state.playingId) {
+        return;
       }
-      return state.currentTime * 100 / state.duration;
-    }
+      const item = rootGetters['tracks/itemById'](id);
+      if (!item) {
+        return;
+      }
+      if (getters.connected(connected)) {
+        return rootGetters['spotify/isPlaying'](item.uri);
+      } else {
+        return rootGetters['audioNative/isPlaying'](item.preview);
+      }
+    },
+
+    progress: (state, getters, rootSate, rootGetters) => {
+      if (getters.connected()) {
+        // return rootGetters['spotify/isPlaying'](item.uri);
+      } else {
+        return rootGetters['audioNative/progress'];
+      }
+    },
   },
 
   actions: {
-    init: async ({ state, commit }) => {
-      commit('audio', new Audio());
-      state.audio.play();
-      state.audio.pause();
-      state.audio.currentTime = 0;
-    },
-    src: async ({ state, getters, commit, dispatch }, payload) => {
-      if (state.audio) {
-        dispatch('stop');
+    play: ({ commit, dispatch, getters }, { id, preview, uri, currentTime, connected })  => {
+      commit('playingId', id);
+      if (getters.connected(connected)) {
+        dispatch('spotify/play', { uri, currentTime }, { root: true });
       } else {
-        await dispatch('init');
+        dispatch('audioNative/play', { src: preview, currentTime }, { root: true });
       }
-      commit('src', payload)
-      commit('volume', 0.2);
-      commit('playing', true);
-      state.audio.addEventListener('loadedmetadata', () => {
-        commit('duration', state.audio.duration);
-      });
-      state.audio.addEventListener('canplaythrough', () => {
-        state.audio.play();
-      });
-      state.audio.addEventListener('ended', () => {
-        commit('playing', false);
-        commit('src', null);
-        commit('currentTime', state.duration);
-      });
-      state.audio.src = state.src;
     },
 
-    play: async ({ state, getters, commit, dispatch }, { src, currentTime } = {}) => {
-      if (typeof currentTime !== 'undefined') {
-        commit('currentTime', currentTime);
-        state.audio.currentTime = state.currentTime;
-      }
-      if (state.src !== src) {
-        await dispatch('src', src);
+    pause: ({ dispatch, getters }, { connected })  => {
+      if (getters.connected(connected)) {
+        dispatch('spotify/pause', null, { root: true });
       } else {
-        state.audio.play();
+        dispatch('audioNative/pause', null, { root: true });
       }
-      requestAnimationFrame(() => dispatch('progress'));
-      commit('playing', true);
     },
 
-    pause: ({ state, commit }) => {
-      if (state.audio) {
-        state.audio.pause();
+    stop: ({ commit, dispatch, getters }, { connected } = {})  => {
+      commit('playingId', null);
+      if (getters.connected(connected)) {
+        // dispatch('spotify/stop', { root: true });
+        dispatch('spotify/pause', { root: true });
+      } else {
+        dispatch('audioNative/stop', { root: true });
       }
-      commit('playing', false);
     },
 
-    stop: ({ state, commit }) => {
-      if (state.audio) {
-        state.audio.src = '';
-      }
-      commit('src', null);
-      commit('playing', false);
-      commit('currentTime', null);
-    },
-
-    progress: ({ state, commit, dispatch }) => {
-      if (state.playing) {
-        commit('currentTime', state.audio.currentTime);
-        requestAnimationFrame(() => dispatch('progress'))
+    progress: ({ }, { connected } = {}) => {
+      if (getters.connected(connected)) {
+        // dispatch('spotify/progress', { root: true });
+      } else {
+        dispatch('audioNative/progress', { root: true });
       }
     }
   }
-};
+}

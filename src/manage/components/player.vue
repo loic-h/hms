@@ -76,7 +76,6 @@ export default {
       this.$store.dispatch('player/pause');
     },
     onInfosClick() {
-      console.log(this.url)
       this.$router.push(this.url);
       this.$emit('show-track-section');
     }

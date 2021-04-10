@@ -23,8 +23,6 @@ export default {
         try {
           await this.$store.dispatch('spotify/token', v);
         } catch {
-          console.log(this.$router)
-          console.log(this.$route)
           if (this.$route.name === 'Admin') {
             connect();
           }
@@ -32,9 +30,6 @@ export default {
       },
       immediate: true
     }
-  },
-  mounted() {
-    console.log(this.$route)
   }
 }
 </script>
