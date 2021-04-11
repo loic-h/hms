@@ -28,22 +28,27 @@ export default {
   },
   computed: {
     ...mapState('audio', ['playing']),
-    ...mapGetters('audio', ['progress'])
+    ...mapGetters('audio', ['progress']),
+    ...mapState('game', ['connected'])
   },
   methods: {
     initAudio() {
-      listen('play', ({ id, src, currentTime, position }) => {
-        this.$store.dispatch('audio/play', { src, currentTime });
+      if (this.connected) {
+        this.$store.dispatch('spotify/loadPlayer');
+      }
+
+      listen('play', ({ id, preview, uri, currentTime, position }) => {
+        this.$store.dispatch('audio/play', { id, preview, uri, currentTime, connected: this.connected });
         this.$store.commit('track/id', id);
-        this.$store.commit('track/src', src);
+        this.$store.commit('track/src', preview);
         this.$store.commit('track/position', position)
       });
 
       listen('pause', () => {
-        this.$store.dispatch('audio/pause');
+        this.$store.dispatch('audio/pause', { connected: this.connected });
       });
     }
-  }
+  },
 }
 </script>
 

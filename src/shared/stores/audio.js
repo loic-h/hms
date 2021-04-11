@@ -13,7 +13,7 @@ export default {
 
   getters: {
     connected: (state, getters, rootSate, rootGetters) => connected => {
-      if (typeof connected === 'boolean') {
+      if (typeof connected === 'boolean' || connected === 'true') {
         return (connected);
       }
       if (typeof rootGetters['games/isGameConnected'] === 'boolean') {

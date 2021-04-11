@@ -9,6 +9,7 @@ export default {
     id: null,
     title: null,
     totalTracks: null,
+    connected: null,
     answers: [/*
       {
         gameId,
@@ -25,6 +26,10 @@ export default {
 
     title: (state, payload) => {
       state.title = payload;
+    },
+
+    connected: (state, payload) => {
+      state.connected = payload;
     },
 
     answers: (state, payload) => {

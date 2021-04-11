@@ -85,6 +85,7 @@ export default {
     },
 
     play: async ({ state, commit }, { uri }) => {
+      console.log('spotify play ', uri)
       await play(uri, state.token);
       commit('playing', true);
     },

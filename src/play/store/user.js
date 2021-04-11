@@ -6,7 +6,7 @@ export default {
 
   state: {
     id: null,
-    name: name,
+    name: null,
     ready: false
   },
 
@@ -31,7 +31,7 @@ export default {
       }
       commit('ready', true);
       commit('name', name);
-      dispatch('audio/init', null, { root: true });
+      // dispatch('audio/init', null, { root: true });
       subscribe(rootState.game.id)
         .then(() => {
           dispatch('join');
@@ -42,9 +42,12 @@ export default {
         dispatch('audio/pause', null, { root: true });
       });
 
-      listen('status', ({ title, src, currentTime, totalTracks }) => {
-        if (src) {
-          dispatch('audio/play', { src, currentTime }, { root: true });
+      listen('status', ({ title, preview, uri, currentTime, totalTracks, connect }) => {
+        if (typeof connect !== 'undefined') {
+          commit('game/connected', connect, { root: true });
+        }
+        if (preview || uri) {
+          dispatch('audio/play', { preview, uri, currentTime, connected: rootState.game.connected }, { root: true });
         }
         commit('game/title', title, { root: true });
         commit('game/totalTracks', totalTracks, { root: true });

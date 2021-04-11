@@ -45,6 +45,9 @@ module.exports = {
             pusher: {
               key: process.env.PUSHER_KEY,
               cluster: process.env.PUSHER_CLUSTER
+            },
+            spotify: {
+              clientId: process.env.SPOTIFY_CLIENT_ID
             }
           },
           title

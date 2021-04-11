@@ -46,7 +46,7 @@ const routes = [
       try {
         game = await store.dispatch('games/fetch', { id });
       } catch(e) {
-        console.log(e)
+        console.log('Error fetching game', e);
       }
       if (!game) {
         return { name: 'Home' };

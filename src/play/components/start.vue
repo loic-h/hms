@@ -2,7 +2,6 @@
   <div class="home__logo cursored">
     <logo type="big" />
   </div>
-
   <form @submit="onSubmit" class="start">
     <input-text
       class="start__input"
@@ -29,7 +28,9 @@ export default {
     Cta
   },
   computed: {
-    ...mapState('user', ['name'])
+    ...mapState({
+      name: state => state.user.name || state.spotify.name
+    })
   },
   methods: {
     onSubmit(e) {

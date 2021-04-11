@@ -34,12 +34,12 @@ export default {
   actions: {
     play: async ({ getters, commit, dispatch, rootState, rootGetters }, id) => {
       commit('id', id);
-      let src, uri;
+      let { preview, uri } = getters.track;
       dispatch('audio/play', { ...getters.track, connected: rootGetters['games/isGameConnected'] }, { root: true });
       push('play', {
         id,
         position: rootGetters['tracks/itemPosition'](id),
-        src,
+        preview,
         uri,
         currentTime: rootState.audio.currentTime
       });

@@ -1,23 +1,31 @@
 import globals from '../utils/globals';
 
 const authorizeUrl = new URL('https://accounts.spotify.com/authorize');
-const params = {
-  client_id: globals.env.spotify.clientId,
-  redirect_uri: window.location.origin,
-  scope: 'playlist-modify-public playlist-read-private playlist-modify-private streaming user-read-email user-read-private',
-  response_type: 'token'
-};
 let player;
 let playerId;
 
-for (const [key, value] of Object.entries(params)) {
-  authorizeUrl.searchParams.append(key, value);
+const authorizeEndpoint = (slug = '') => {
+  const redirectUrl = new URL(slug, window.location.origin);
+  const params = {
+    client_id: globals.env.spotify.clientId,
+    redirect_uri: redirectUrl.toString(),
+    scope: 'playlist-modify-public playlist-read-private playlist-modify-private streaming user-read-email user-read-private',
+    response_type: 'token'
+  };
+
+  for (const [key, value] of Object.entries(params)) {
+    authorizeUrl.searchParams.append(key, value);
+  }
+
+  return authorizeUrl.toString();
 }
 
-export const authorizeEndpoint = authorizeUrl.toString();
-
 export const connect = () => {
-  window.location.href = authorizeEndpoint;
+  window.location.href = authorizeEndpoint();
+};
+
+export const connectPlay = () => {
+  window.location.href = authorizeEndpoint('play');
 };
 
 export const getUser = async ({ token }) => {

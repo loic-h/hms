@@ -10,8 +10,8 @@ export default {
     ...mapState('spotify', ['token'])
   },
   mounted() {
-    if (token) {
-      this.$store.dispatch('spotify/token', token);
+    if (this.token) {
+      this.$store.dispatch('spotify/token', this.token);
     }
   }
 }

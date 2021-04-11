@@ -1,6 +1,8 @@
 import Vuex from "vuex";
 import VuexPersistence from 'vuex-persist'
 import audio from '../../shared/stores/audio';
+import audioNative from '../../shared/stores/audio-native';
+import spotify from '../../shared/stores/spotify';
 import user from './user';
 import game from './game';
 import track from './track';
@@ -14,7 +16,9 @@ const vuexLocal = new VuexPersistence({
       name: state.user.name
     },
     game: {
-      answers: state.game.answers
+      id: state.game.id,
+      answers: state.game.answers,
+      connected: state.game.connected
     }
   })
 });
@@ -22,6 +26,8 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   modules: {
     audio,
+    audioNative,
+    spotify,
     user,
     game,
     track
