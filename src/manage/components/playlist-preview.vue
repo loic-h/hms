@@ -64,7 +64,7 @@ export default {
     },
 
     createUrl() {
-      const url = `/create/${this.playlist.id}`;
+      let url = `/create/${this.playlist.id}`;
       if (this.connectedGame) {
         url += `?connected=${this.connectedGame ? 1 : 0}`
       }
